@@ -1,16 +1,44 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
+<div class="container">
+    <div class="text-center mt-5">
+        <h1 class="display-4">Ready to Unlock High Performance in Finance?</h1>
+        <p>Your trusted partner in financial services and solutions.</p>
+    </div>
 
-    <h2>Manage Clients</h2>
-    <p>Choose an option:</p>
-    <ul>
-        <li><a asp-controller="Clients" asp-action="IndividualClients">View Individual Clients</a></li>
-        <li><a asp-controller="Clients" asp-action="CreateIndividual">Create Individual Client</a></li>
-        <li><a asp-controller="Clients" asp-action="CorporateClients">View Corporate Clients</a></li>
-        <li><a asp-controller="Clients" asp-action="CreateCorporate">Create Corporate Client</a></li>
-    </ul>
+    <div class="row mt-5">
+        <div class="col-md-6">
+            <img src="~/images/1.jpeg" class="img-fluid rounded" alt="Financial Planning">
+            <h3 class="mt-3">Innovative Financial Solutions</h3>
+            <p>
+                At ABC Corporation, we leverage advanced financial strategies to innovate and transform your financial future. Our team is dedicated to optimizing your investments and delivering proactive and sustainable financial solutions. We continuously strive to foster robust financial ecosystems and drive operational excellence.
+            </p>
+        </div>
+        <div class="col-md-6">
+            <img src="~/images/2.jpeg" class="img-fluid rounded" alt="Cutting-Edge Technologies">
+            <h3 class="mt-3">Cutting-Edge Financial Technologies</h3>
+            <p>
+                Our core competencies include leveraging cutting-edge financial technologies to enhance value propositions and streamline scalable financial platforms. By embracing agile methodologies and championing customer-centric frameworks, we aim to disrupt traditional markets and achieve unprecedented financial growth. Join us as we navigate the complexities of the financial industry and pioneer industry-leading advancements.
+            </p>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-6">
+            <img src="~/images/3.jpeg" class="img-fluid rounded" alt="Collaboration">
+            <h3 class="mt-3">Cross-Functional Collaboration</h3>
+            <p>
+                We believe in the power of cross-functional collaboration and the relentless pursuit of excellence. Our mission is to empower stakeholders, innovate with integrity, and deliver transformative financial experiences that redefine success. Together, we are building a future where financial possibilities are limitless and opportunities abound.
+            </p>
+        </div>
+        <div class="col-md-6">
+            <img src="~/images/4.jpg" class="img-fluid rounded" alt="Operational Excellence">
+            <h3 class="mt-3">Operational Excellence in Finance</h3>
+            <p>
+                Our commitment to operational excellence ensures that we deliver the highest standards of quality and service. Through continuous improvement and innovation, we strive to exceed our clients' expectations and drive long-term value creation in the financial sector.
+            </p>
+        </div>
+    </div>
 </div>

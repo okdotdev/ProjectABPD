@@ -1,4 +1,4 @@
-namespace abcAPI.Models;
+namespace abcAPI.Models.ViewModels;
 
 public class ErrorViewModel
 {

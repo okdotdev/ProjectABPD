@@ -1,18 +1,14 @@
-@model TModel
-
 @{
-    Layout = null;
+    ViewData["Title"] = "Control Panel";
 }
 
-<!DOCTYPE html>
 
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
-<div>
-      
-</div>
-</body>
-</html>
+<main class="container mt-4">
+    <h1>Client Management</h1>
+
+    <a asp-area="" asp-controller="Client" asp-action="CorporateClients" class="btn btn-primary">Manage Corporate Clients</a>
+    <a asp-area="" asp-controller="Client" asp-action="IndividualClients" class="btn btn-primary">Manage Individual Clients</a>
+
+
+</main>
+

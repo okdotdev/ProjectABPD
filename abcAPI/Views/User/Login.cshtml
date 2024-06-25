@@ -1,58 +1,35 @@
+@model abcAPI.Models.ViewModels.LoginViewModel
+
 @{
-    ViewData["Title"] = "Login";
+ViewData["Title"] = "Login";
 }
 
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Login - ABC Corporation</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
-</head>
-<body>
-<h2><b>Login or Register</b></h2>
 <div class="container mt-5">
     <div class="row">
         <div class="col-md-6">
             <h3>Login</h3>
             <form asp-action="Login" method="post">
+                @if (TempData["ErrorMessage"] != null)
+                {
+                <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+                }
                 <div class="form-group">
-                    <label>Nickname</label>
-                    <input class="form-control" type="text" name="nickname" required>
+                    <label asp-for="Nickname"></label>
+                    <input class="form-control" asp-for="Nickname" />
+                    <span asp-validation-for="Nickname" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label>Password</label>
-                    <input class="form-control" type="password" name="password" required>
+                    <label asp-for="Password"></label>
+                    <input class="form-control" asp-for="Password" type="password" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
                 <button type="submit" class="btn btn-primary mt-3">Login</button>
-            </form>
-        </div>
-        <div class="col-md-6">
-            <h3>Register</h3>
-            <form asp-action="Register" method="post">
-                <div class="form-group">
-                    <label>Name</label>
-                    <input class="form-control" type="text" name="name" required>
-                </div>
-                <div class="form-group">
-                    <label>Nickname</label>
-                    <input class="form-control" type="text" name="nickname" required>
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input class="form-control" type="password" name="password" required>
-                </div>
-                <button type="submit" class="btn btn-primary mt-3">Register</button>
             </form>
         </div>
     </div>
 </div>
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="~/js/site.js" asp-append-version="true"></script>
-</body>
-</html>
+
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+}

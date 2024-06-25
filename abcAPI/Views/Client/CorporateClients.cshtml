@@ -1,0 +1,30 @@
+@model abcAPI.Models.ViewModels.ClientViewModel
+
+@{
+ViewData["Title"] = "Corporate Clients";
+}
+
+<main class="container mt-4">
+    <h1>Corporate Client Management</h1>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Company Name</th>
+            <th>KRS</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (ClientCompany client in Model.CorporateClients)
+        {
+        <tr>
+            <td>@client.Email</td>
+            <td>@client.PhoneNumber</td>
+            <td>@client.CompanyName</td>
+            <td>@client.Krs</td>
+        </tr>
+        }
+        </tbody>
+    </table>
+</main>

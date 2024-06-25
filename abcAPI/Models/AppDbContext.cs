@@ -1,21 +1,19 @@
 using abcAPI.Models.Config;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace abcAPI.Models;
 
-public class ApplicationDbContext : DbContext
+public class AppDbContext :  IdentityDbContext<User>
 {
-    public DbSet<IndividualClient> IndividualClients { get; set; }
-    public DbSet<CorporateClient> CorporateClients { get; set; }
-
+    public DbSet<Client> Clients { get; set; }
     public DbSet<User> Users { get; set; }
 
-
-    public ApplicationDbContext()
+    public AppDbContext()
     {
     }
 
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+    public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options)
     {
     }
@@ -24,6 +22,6 @@ public class ApplicationDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(CorporateClientEFConfig).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ClientEfConfig).Assembly);
     }
 }
