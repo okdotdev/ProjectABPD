@@ -1,7 +1,11 @@
 @model abcAPI.Models.ViewModels.ClientViewModel
+@using abcAPI.Models.TableModels
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<User> UserManager
 
 @{
-    ViewData["Title"] = "Individual Clients";
+ViewData["Title"] = "Individual Clients";
+var isAdmin = UserManager.GetRolesAsync(UserManager.GetUserAsync(User).Result).Result.Contains("Admin");
 }
 
 <main class="container mt-4">
@@ -9,24 +13,93 @@
     <table class="table table-striped">
         <thead>
         <tr>
-            <th>Nickname</th>
-            <th>Email</th>
-            <th>Phone Number</th>
             <th>First Name</th>
             <th>Last Name</th>
-            <th>Pesel</th>
+            <th>PESEL</th>
+            <th>Address</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            @if (isAdmin)
+            {
+            <th>Actions</th>
+            }
         </tr>
         </thead>
         <tbody>
         @foreach (ClientIndividual client in Model.IndividualClients)
         {
-            <tr>
-                <td>@client.Email</td>
-                <td>@client.PhoneNumber</td>
-                <td>@client.FirstName</td>
-                <td>@client.LastName</td>
-                <td>@client.Pesel</td>
-            </tr>
+        <tr>
+            @if (isAdmin)
+            {
+            <form asp-controller="Client" asp-action="UpdateIndividualClient" method="post" class="form-inline">
+                <td>
+                    <input type="hidden" name="IdClient" value="@client.IdClient" />
+                    <input type="text" name="FirstName" class="form-control" value="@client.FirstName" />
+                </td>
+                <td>
+                    <input type="text" name="LastName" class="form-control" value="@client.LastName" />
+                </td>
+                <td>
+                    <input type="text" name="Pesel" class="form-control" value="@client.Pesel" />
+                </td>
+                <td>
+                    <input type="text" name="Address" class="form-control" value="@client.Address" />
+                </td>
+                <td>
+                    <input type="email" name="Email" class="form-control" value="@client.Email" />
+                </td>
+                <td>
+                    <input type="text" name="PhoneNumber" class="form-control" value="@client.PhoneNumber" />
+                </td>
+                <td>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </td>
+            </form>
+            <td>
+                <form asp-controller="Client" asp-action="DeleteIndividualClient" method="post" class="form-inline">
+                    <input type="hidden" name="IdClient" value="@client.IdClient"/>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </td>
+            }
+            else
+            {
+            <td>@client.FirstName</td>
+            <td>@client.LastName</td>
+            <td>@client.Pesel</td>
+            <td>@client.Address</td>
+            <td>@client.Email</td>
+            <td>@client.PhoneNumber</td>
+            }
+        </tr>
+        }
+        @if (isAdmin)
+        {
+        <tr>
+            <form asp-controller="Client" asp-action="AddIndividualClient" method="post">
+                <td>
+                    <input type="text" name="FirstName" class="form-control" placeholder="First Name" required />
+                </td>
+                <td>
+                    <input type="text" name="LastName" class="form-control" placeholder="Last Name" required />
+                </td>
+                <td>
+                    <input type="text" name="Pesel" class="form-control" placeholder="PESEL" required />
+                </td>
+                <td>
+                    <input type="text" name="Address" class="form-control" placeholder="Address" required />
+                </td>
+                <td>
+                    <input type="email" name="Email" class="form-control" placeholder="Email" required />
+                </td>
+                <td>
+                    <input type="text" name="PhoneNumber" class="form-control" placeholder="Phone Number" required />
+                </td>
+                <td>
+                    <button type="submit" class="btn btn-success">Add</button>
+                </td>
+            </form>
+        </tr>
         }
         </tbody>
     </table>

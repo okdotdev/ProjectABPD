@@ -1,7 +1,11 @@
 @model abcAPI.Models.ViewModels.ClientViewModel
+@using abcAPI.Models.TableModels
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<User> UserManager
 
 @{
 ViewData["Title"] = "Corporate Clients";
+var isAdmin = UserManager.GetRolesAsync(UserManager.GetUserAsync(User).Result).Result.Contains("Admin");
 }
 
 <main class="container mt-4">
@@ -9,20 +13,79 @@ ViewData["Title"] = "Corporate Clients";
     <table class="table table-striped">
         <thead>
         <tr>
-            <th>Email</th>
-            <th>Phone Number</th>
             <th>Company Name</th>
             <th>KRS</th>
+            <th>Address</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            @if (isAdmin)
+            {
+            <th>Actions</th>
+            }
         </tr>
         </thead>
         <tbody>
         @foreach (ClientCompany client in Model.CorporateClients)
         {
         <tr>
-            <td>@client.Email</td>
-            <td>@client.PhoneNumber</td>
+            @if (isAdmin)
+            {
+            <form asp-controller="Client" asp-action="UpdateCorporateClient" method="post" class="form-inline">
+                <td>
+                    <input type="hidden" name="IdClient" value="@client.IdClient"/>
+                    <input type="text" name="CompanyName" class="form-control" value="@client.CompanyName"/>
+                </td>
+                <td>
+                    <input type="text" name="Krs" class="form-control" value="@client.Krs"/>
+                </td>
+                <td>
+                    <input type="text" name="Address" class="form-control" value="@client.Address"/>
+                </td>
+                <td>
+                    <input type="email" name="Email" class="form-control" value="@client.Email"/>
+                </td>
+                <td>
+                    <input type="text" name="PhoneNumber" class="form-control" value="@client.PhoneNumber"/>
+                </td>
+                <td>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </td>
+            </form>
+
+            }
+            else
+            {
             <td>@client.CompanyName</td>
             <td>@client.Krs</td>
+            <td>@client.Address</td>
+            <td>@client.Email</td>
+            <td>@client.PhoneNumber</td>
+            }
+        </tr>
+        }
+        @if (isAdmin)
+        {
+        <tr>
+            <form asp-controller="Client" asp-action="AddCorporateClient" method="post">
+                <td>
+                    <input type="text" name="CompanyName" class="form-control" placeholder="Company Name" required/>
+                </td>
+                <td>
+                    <input type="text" name="Krs" class="form-control" placeholder="KRS" required/>
+                </td>
+                <td>
+                    <input type="text" name="Address" class="form-control" placeholder="Address" required/>
+                </td>
+                <td>
+                    <input type="email" name="Email" class="form-control" placeholder="Email" required/>
+                </td>
+                <td>
+                    <input type="text" name="PhoneNumber" class="form-control" placeholder="Phone Number" required/>
+                </td>
+                <td>
+                    <button type="submit" class="btn btn-success">Add</button>
+                </td>
+            </form>
         </tr>
         }
         </tbody>

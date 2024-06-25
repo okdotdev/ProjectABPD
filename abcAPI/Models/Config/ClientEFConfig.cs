@@ -13,7 +13,7 @@ public class ClientEfConfig : IEntityTypeConfiguration<Client>
 
         builder.Property(e => e.Address).IsRequired().HasMaxLength(50);
         builder.Property(e => e.Email).IsRequired().HasMaxLength(50);
-        builder.Property(e => e.PhoneNumber).IsRequired().HasMaxLength(11);
+        builder.Property(e => e.PhoneNumber).IsRequired().HasMaxLength(50);
 
         builder.Property(e => e.IsDeleted).IsRequired();
         builder.HasQueryFilter(p => !p.IsDeleted);
@@ -36,7 +36,7 @@ public class ClientIndividualEfConfig : IEntityTypeConfiguration<ClientIndividua
         builder.HasBaseType<Client>();
         builder.Property(e => e.FirstName).IsRequired().HasMaxLength(50);
         builder.Property(e => e.LastName).IsRequired().HasMaxLength(50);
-        builder.Property(e => e.Pesel).IsRequired().HasMaxLength(11);
+        builder.Property(e => e.Pesel).IsRequired().HasMaxLength(50);
 
 
     }
@@ -48,7 +48,7 @@ public class ClientCompanyEfConfig : IEntityTypeConfiguration<ClientCompany>
     {
         builder.HasBaseType<Client>();
         builder.Property(e => e.CompanyName).IsRequired().HasMaxLength(100);
-        builder.Property(e => e.Krs).IsRequired().HasMaxLength(10);
+        builder.Property(e => e.Krs).IsRequired().HasMaxLength(50);
 
     }
 }

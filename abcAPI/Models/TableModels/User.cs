@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 
-namespace abcAPI.Models;
+namespace abcAPI.Models.TableModels;
 
 public class User : IdentityUser
 {
-    public string Nickname { get; set; } = string.Empty;
-    public bool IsAdmin { get; set; }
+
 }
