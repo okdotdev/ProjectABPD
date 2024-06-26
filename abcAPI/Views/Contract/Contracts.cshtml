@@ -7,7 +7,7 @@
 
 @{
     ViewData["Title"] = "Contracts";
-    var isAdmin = UserManager.GetRolesAsync(UserManager.GetUserAsync(User).Result).Result.Contains("Admin");
+    bool isAdmin = UserManager.GetRolesAsync(UserManager.GetUserAsync(User).Result).Result.Contains("Admin");
 }
 
 <main class="container mt-4">
@@ -20,6 +20,7 @@
             <th>StartDate</th>
             <th>EndDate</th>
             <th>Price</th>
+            <th>Amount Payed</th>
             <th>IsPaid</th>
             <th>IsSigned</th>
             <th>Version</th>
@@ -36,6 +37,7 @@
                 <td>@contractDto.StartDate</td>
                 <td>@contractDto.EndDate</td>
                 <td>@contractDto.Price</td>
+                <td>@contractDto.AmountPaid</td>
                 <td>@contractDto.IsPaid</td>
                 <td>@contractDto.IsSigned</td>
                 <td>@contractDto.Version</td>
@@ -43,11 +45,7 @@
                 <td>
                     @if (!contractDto.IsPaid)
                     {
-                        <form asp-controller="Contract" asp-action="PayForContract" method="post" class="d-inline">
-                            <input type="hidden" name="contractId" value="@contractDto.Id"/>
-                            <input type="hidden" name="Amount" value="@contractDto.Price"/>
-                            <button type="submit" class="btn btn-outline-primary">Pay</button>
-                        </form>
+                        <a asp-controller="Contract" asp-action="Payment" asp-route-contractId="@contractDto.Id" class="btn btn-outline-primary">Pay</a>
                     }
                     @if (!contractDto.IsSigned)
                     {

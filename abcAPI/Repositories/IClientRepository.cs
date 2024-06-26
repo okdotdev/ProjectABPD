@@ -10,6 +10,6 @@ public interface IClientRepository
     Task UpdateClientAsync(UpdateClientDto client);
     Task DeleteClientAsync(int id);
     Task<Client> GetClientByIdAsync(int clientId);
-
     Task<List<GetClientDto>> GetClientsListAsync(string type);
+
 }

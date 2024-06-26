@@ -18,6 +18,8 @@ public class ContractEfConfig : IEntityTypeConfiguration<Contract>
         builder.Property(e => e.IsPaid).IsRequired();
         builder.Property(e => e.AdditionalSupportYears).IsRequired();
         builder.Property(e => e.IsSigned).IsRequired();
+        builder.Property(e => e.Version).IsRequired().HasMaxLength(50);
+        builder.Property(e => e.AmountPaid).HasColumnType("decimal(18,2)");
 
         builder.HasOne(e => e.Software)
             .WithMany(e => e.Contracts)

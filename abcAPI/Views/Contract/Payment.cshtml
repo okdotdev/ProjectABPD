@@ -1,13 +1,23 @@
+@model abcAPI.Models.ViewModels.PaymentViewModel
 
-<!DOCTYPE html>
+@{
+    int contractId = Model.ContractId;
+    decimal leftAmount = Model.LeftAmount;
+    ViewData["Title"] = "Payment for Contract " + contractId;
+}
 
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
-<div>
-
+<div class="container mt-4">
+    <h1>Pay for Contract @contractId</h1>
+    <h2>Left Amount: @leftAmount</h2>
+    <form asp-controller="Contract" asp-action="PayForContract" method="post">
+        <div class="form-group">
+            <label for="ContractId">Contract ID</label>
+            <input type="number" class="form-control" id="ContractId" name="ContractId" value="@contractId" readonly/>
+        </div>
+        <div class="form-group">
+            <label for="Amount">Amount</label>
+            <input type="text" class="form-control" id="Amount" name="Amount" step="0.01" required/>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit Payment</button>
+    </form>
 </div>
-</body>
-</html>

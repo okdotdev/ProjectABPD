@@ -1,6 +1,6 @@
+using abcAPI.Exceptions;
 using abcAPI.Models;
 using abcAPI.Models.TableModels;
-using Microsoft.EntityFrameworkCore;
 
 namespace abcAPI.Repositories;
 
@@ -13,11 +13,22 @@ public class DiscountRepository : IDiscountRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<Discount>> GetActiveDiscountsAsync()
+
+    public Task<Discount> GetBiggestDiscountAsync()
     {
-        var currentDate = DateTime.Now;
-        return await _context.Discounts
-            .Where(d => d.StartDate <= currentDate && d.EndDate >= currentDate)
-            .ToListAsync();
+        List<Discount> discounts = _context.Discounts
+            .Where(d => d.StartDate <= DateTime.Now && d.EndDate >= DateTime.Now)
+            .OrderByDescending(d => d.Value)
+            .ToList();
+
+
+        Discount? biggestDiscount = discounts.FirstOrDefault();
+
+        if (biggestDiscount == null)
+        {
+            throw new NotFoundException("No active discounts found");
+        }
+
+        return Task.FromResult(biggestDiscount);
     }
 }

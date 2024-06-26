@@ -51,5 +51,10 @@ namespace abcAPI.Services
         {
             return await _repository.GetClientsListAsync(type);
         }
+
+        public Task GetClientAsync(int clientId)
+        {
+            return _repository.GetClientByIdAsync(clientId);
+        }
     }
 }

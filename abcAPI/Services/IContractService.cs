@@ -6,9 +6,10 @@ namespace abcAPI.Services;
 
 public interface IContractService
 {
-    Task<Contract> CreateContractAsync(CreateContractDto createContractDto);
-    Task<bool> PayForContractAsync(int contractId, PaymentDto paymentDto);
+    Task CreateContractAsync(CreateContractDto createContractDto);
+    Task PayForContractAsync( PaymentDto paymentDto);
     Task<List<GetContractDto>> GetContractsAsync();
     Task SignContractAsync(int contractId);
     Task DeleteContractAsync(int contractId);
+    Task<Contract> GetContractByIdAsync(int contractId);
 }

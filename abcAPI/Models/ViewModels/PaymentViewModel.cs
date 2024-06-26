@@ -4,5 +4,7 @@ namespace abcAPI.Models.ViewModels;
 
 public class PaymentViewModel
 {
-    List<PaymentDto> Payments { get; set; }
+    public decimal LeftAmount { get; set; }
+    public int ContractId { get; set; }
+
 }

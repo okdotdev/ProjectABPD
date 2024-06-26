@@ -27,23 +27,16 @@ public class ContractRepository : IContractRepository
         return contract;
     }
 
-    public async Task<IEnumerable<Contract>> GetActiveContractsForClientAsync(int clientId, int softwareId)
-    {
-        return await _context.Contracts
-            .Where(c => c.ClientContracts.Any(cc => cc.ClientId == clientId) && c.SoftwareId == softwareId &&
-                        c.IsSigned && c.EndDate >= DateTime.Now)
-            .ToListAsync();
-    }
-
-    public async Task AddContractAsync(Contract contract)
-    {
-        await _context.Contracts.AddAsync(contract);
-        await _context.SaveChangesAsync();
-    }
 
     public async Task UpdateContractAsync(Contract contract)
     {
         _context.Contracts.Update(contract);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task AddPaymentAsync(Payment payment)
+    {
+        _context.Payments.Add(payment);
         await _context.SaveChangesAsync();
     }
 
@@ -60,8 +53,38 @@ public class ContractRepository : IContractRepository
         if (contractsToDelete.Any())
         {
             _context.Contracts.RemoveRange(contractsToDelete);
-            await _context.SaveChangesAsync();
+            //usuwam również płatności
+            _context.Payments.RemoveRange(_context.Payments.Where(p => contractsToDelete.Contains(p.Contract)));
         }
+
+
+        foreach (Contract contract in contracts)
+        {
+            List<Payment> payments = await _context.Payments.Where(p => p.ContractId == contract.Id).ToListAsync();
+
+            decimal sum = 0;
+
+            foreach (Payment payment in payments)
+            {
+                sum += payment.Amount;
+            }
+
+            contract.AmountPaid = sum;
+
+            if (contract.AmountPaid >= contract.Price)
+            {
+                contract.IsPaid = true;
+            }
+            else
+            {
+                contract.IsPaid = false;
+            }
+        }
+
+
+        _context.Contracts.UpdateRange(contracts);
+
+        await _context.SaveChangesAsync();
 
         List<GetContractDto> contractDtos = contracts
             .Where(c => !contractsToDelete.Contains(c))
@@ -74,7 +97,9 @@ public class ContractRepository : IContractRepository
                 EndDate = contract.EndDate,
                 Price = contract.Price,
                 IsPaid = contract.IsPaid,
+                AmountPaid = contract.AmountPaid,
                 Version = contract.Version,
+               // SoftwareName = contract.Software.Name,
                 AdditionalSupportYears = contract.AdditionalSupportYears,
                 IsSigned = contract.IsSigned
             }).ToList();
@@ -104,5 +129,29 @@ public class ContractRepository : IContractRepository
         {
             throw new NotFoundException("Contract not found");
         }
+    }
+
+    public bool ClientHasContractForSoftwareAsync(int clientId, int softwareId)
+    {
+        return _context.Contracts.Any(c => c.ClientContracts.Any(cc => cc.ClientId == clientId) &&
+                                           c.SoftwareId == softwareId && c.IsSigned && c.EndDate >= DateTime.Now);
+    }
+
+    public bool ClientHasContractForAnySoftwareAsync(int clientId)
+    {
+        return _context.Contracts.Any(c => c.ClientContracts.Any(cc => cc.ClientId == clientId) && c.IsSigned &&
+                                           c.EndDate >= DateTime.Now);
+    }
+
+    public async Task CreateContractAsync(Contract contract, int clientId)
+    {
+        _context.Contracts.Add(contract);
+
+        _context.ClientContracts.Add(new ClientContract
+        {
+            ClientId = clientId,
+            Contract = contract
+        });
+        await _context.SaveChangesAsync();
     }
 }

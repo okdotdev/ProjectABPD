@@ -14,6 +14,7 @@ public class AppDbContext : IdentityDbContext<User>
     public DbSet<Discount> Discounts { get; set; }
     public DbSet<Subscription> Subscriptions { get; set; }
     public DbSet<ClientContract> ClientContracts { get; set; }
+    public DbSet<Payment> Payments { get; set; }
 
     public AppDbContext()
     {
@@ -236,6 +237,5 @@ public class AppDbContext : IdentityDbContext<User>
                 ContractId = 2
             }
         );
-
     }
 }

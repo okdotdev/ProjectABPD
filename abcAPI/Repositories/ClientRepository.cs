@@ -133,9 +133,15 @@ namespace abcAPI.Repositories
             return clientDtos;
         }
 
+
         public async Task<Client> GetClientByIdAsync(int clientId)
         {
-            return await _context.Clients.FindAsync(clientId);
+            Client? client = await _context.Clients.FindAsync(clientId);
+
+            if (client == null)
+                throw new NotFoundException("Client not found");
+
+            return client;
         }
     }
 }

@@ -1,8 +1,8 @@
 using abcAPI.Models.TableModels;
 
-namespace abcAPI.Repositories;
+namespace abcAPI.Services;
 
-public interface IDiscountRepository
+public interface IDiscountService
 {
     Task<Discount> GetBiggestDiscountAsync();
 }

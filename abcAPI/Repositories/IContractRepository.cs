@@ -5,11 +5,14 @@ namespace abcAPI.Repositories;
 
 public interface IContractRepository
 {
-    Task<Contract> GetContractByIdAsync(int contractId);
-    Task<IEnumerable<Contract>> GetActiveContractsForClientAsync(int clientId, int softwareId);
-    Task AddContractAsync(Contract contract);
-    Task UpdateContractAsync(Contract contract);
+
     Task<List<GetContractDto>> GetContractsAsync();
     Task SignContractAsync(int contractId);
     Task DeleteContractAsync(int contractId);
+    bool ClientHasContractForSoftwareAsync(int clientId, int softwareId);
+    bool ClientHasContractForAnySoftwareAsync(int clientId);
+    Task CreateContractAsync(Contract contract, int clientId);
+    Task<Contract> GetContractByIdAsync(int contractId);
+    Task UpdateContractAsync(Contract contract);
+    Task AddPaymentAsync(Payment payment);
 }
