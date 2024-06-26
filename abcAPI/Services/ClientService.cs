@@ -30,7 +30,7 @@ namespace abcAPI.Services
             User user = await _userManager.FindByNameAsync(nickname);
             if (user == null || !await _userManager.IsInRoleAsync(user, "Admin"))
             {
-                throw new AccessDeniedException("User is not an Admin");
+                throw new AccessViolationException("User is not an Admin");
             }
 
             await _repository.UpdateClientAsync(client);
@@ -41,7 +41,7 @@ namespace abcAPI.Services
             User user = await _userManager.FindByNameAsync(nickname);
             if (user == null || !await _userManager.IsInRoleAsync(user, "Admin"))
             {
-                throw new AccessDeniedException("User is not an Admin");
+                throw new AccessViolationException("User is not an Admin");
             }
 
             await _repository.DeleteClientAsync(id);

@@ -10,20 +10,20 @@ namespace abcAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
+[Authorize]
 public class UserController : Controller
 {
-    private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
 
 
-    public UserController(UserManager<User> userManager, SignInManager<User> signInManager)
+    public UserController( SignInManager<User> signInManager)
     {
-        _userManager = userManager;
         _signInManager = signInManager;
     }
 
 
     [HttpGet]
+    [AllowAnonymous]
     public IActionResult Login()
     {
         return View();
@@ -31,6 +31,7 @@ public class UserController : Controller
 
 
     [HttpPost]
+    [AllowAnonymous]
     public async Task<IActionResult> Login([FromForm] LoginViewModel model)
     {
         if (!ModelState.IsValid)

@@ -1,9 +1,6 @@
 using abcAPI.Models;
 using abcAPI.Models.DTOs;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using abcAPI.Exceptions;
 
 namespace abcAPI.Repositories
@@ -50,7 +47,7 @@ namespace abcAPI.Repositories
             var existingClient = await _context.Clients.FindAsync(client.IdClient);
             if (existingClient == null)
             {
-                throw new ClientNotFoundException("Client not found");
+                throw new NotFoundException("Client not found");
             }
 
             switch (existingClient)
@@ -82,15 +79,16 @@ namespace abcAPI.Repositories
             {
                 if (client is ClientCompany)
                 {
-                    throw new CantDeleteCompanyException("Can't delete company client");
+                    throw new NotSupportedException("Can't delete company client");
                 }
+
                 client.IsDeleted = true;
 
                 await _context.SaveChangesAsync();
             }
             else
             {
-                throw new ClientNotFoundException("Client not found");
+                throw new NotFoundException("Client not found");
             }
         }
 
@@ -133,6 +131,11 @@ namespace abcAPI.Repositories
             }
 
             return clientDtos;
+        }
+
+        public async Task<Client> GetClientByIdAsync(int clientId)
+        {
+            return await _context.Clients.FindAsync(clientId);
         }
     }
 }

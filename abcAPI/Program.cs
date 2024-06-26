@@ -25,6 +25,13 @@ builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<ISoftwareRepository, SoftwareRepository>();
 builder.Services.AddScoped<ISoftwareService, SoftwareService>();
+builder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
+//builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
+builder.Services.AddScoped<IContractRepository, ContractRepository>();
+builder.Services.AddScoped<IContractService, ContractService>();
+builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();
+//builder.Services.AddScoped<IDiscountService, DiscountService>();
+
 
 
 builder.Services.AddDbContext<AppDbContext>(options =>

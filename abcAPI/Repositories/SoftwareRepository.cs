@@ -35,7 +35,7 @@ public class SoftwareRepository : ISoftwareRepository
 
         if (software == null)
         {
-            throw new SoftwareNotFoundException("Software not found");
+            throw new NotFoundException("Software not found");
         }
 
         GetSoftwareDto getSoftwareDto = new()
@@ -63,4 +63,5 @@ public class SoftwareRepository : ISoftwareRepository
             })
             .ToList();
     }
+
 }

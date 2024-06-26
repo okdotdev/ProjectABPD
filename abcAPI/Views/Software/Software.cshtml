@@ -29,6 +29,27 @@ var isAdmin = UserManager.GetRolesAsync(UserManager.GetUserAsync(User).Result).R
             <td>@software.Category</td>
         </tr>
         }
+
+        <tr>
+            <form asp-controller="Software" asp-action="AddSoftware" method="post">
+                <td>
+                    <input type="text" name="Name" class="form-control" placeholder=" Name" required/>
+                </td>
+                <td>
+                    <input type="text" name="Description" class="form-control" placeholder="Description" required/>
+                </td>
+                <td>
+                    <input type="text" name="CurrentVersion" class="form-control" placeholder="CurrentVersion" required/>
+                </td>
+                <td>
+                    <input type="text" name="Category" class="form-control" placeholder="Category" required/>
+                </td>
+                <td>
+                    <button type="submit" class="btn btn-success">Add</button>
+                </td>
+            </form>
+        </tr>
+
         </tbody>
     </table>
 </main>

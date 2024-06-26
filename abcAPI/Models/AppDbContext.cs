@@ -13,6 +13,7 @@ public class AppDbContext : IdentityDbContext<User>
     public DbSet<Contract> Contracts { get; set; }
     public DbSet<Discount> Discounts { get; set; }
     public DbSet<Subscription> Subscriptions { get; set; }
+    public DbSet<ClientContract> ClientContracts { get; set; }
 
     public AppDbContext()
     {
@@ -220,5 +221,21 @@ public class AppDbContext : IdentityDbContext<User>
                 IsActive = true
             }
         );
+
+        modelBuilder.Entity<ClientContract>().HasData(
+            new ClientContract
+            {
+                Id = 1,
+                ClientId = 3,
+                ContractId = 1
+            },
+            new ClientContract
+            {
+                Id = 2,
+                ClientId = 4,
+                ContractId = 2
+            }
+        );
+
     }
 }

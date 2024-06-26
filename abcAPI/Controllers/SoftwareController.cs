@@ -3,6 +3,7 @@ using abcAPI.Models.DTOs;
 using abcAPI.Models.TableModels;
 using abcAPI.Models.ViewModels;
 using abcAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -12,6 +13,7 @@ namespace abcAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class SoftwareController : Controller
 {
     private readonly ISoftwareService _softwareService;
@@ -24,17 +26,14 @@ public class SoftwareController : Controller
     }
 
     [HttpPost("add")]
-    public async Task<IActionResult> AddSoftware([FromBody] AddSoftwareDto software)
+    public async Task<IActionResult> AddSoftware([FromForm] AddSoftwareDto software)
     {
-        if (!IsUserLoggedIn())
-        {
-            return BadRequest("User not logged in");
-        }
+
 
         try
         {
             await _softwareService.AddSoftwareAsync(software);
-            return Ok(software);
+            return RedirectToAction("Software");
         }
         catch (Exception e)
         {
@@ -45,17 +44,14 @@ public class SoftwareController : Controller
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetSoftware(int id)
     {
-        if (!IsUserLoggedIn())
-        {
-            return BadRequest("User not logged in");
-        }
+
 
         try
         {
             GetSoftwareDto software = await _softwareService.GetSoftwareAsync(id);
             return Ok(software);
         }
-        catch (SoftwareNotFoundException e)
+        catch (NotFoundException e)
         {
             return NotFound(e.Message);
         }
@@ -69,10 +65,7 @@ public class SoftwareController : Controller
     [HttpGet("list")]
     public async Task<IActionResult> GetSoftwares()
     {
-        if (!IsUserLoggedIn())
-        {
-            return BadRequest("User not logged in");
-        }
+
 
         try
         {
@@ -88,10 +81,6 @@ public class SoftwareController : Controller
     [HttpGet]
     public async Task<IActionResult> Software()
     {
-        if (!IsUserLoggedIn())
-        {
-            return BadRequest("User not logged in");
-        }
 
         List<GetSoftwareDto> softwares = await _softwareService.GetSoftwaresAsync();
         SoftwareViewModel model = new()
@@ -103,8 +92,5 @@ public class SoftwareController : Controller
     }
 
 
-    public bool IsUserLoggedIn()
-    {
-        return _userManager.GetUserAsync(User).Result != null;
-    }
+
 }

@@ -4,6 +4,7 @@ using abcAPI.Models.DTOs;
 using abcAPI.Models.TableModels;
 using abcAPI.Models.ViewModels;
 using abcAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,6 +12,7 @@ namespace abcAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class ClientController : Controller
 {
     private readonly IClientService _clientService;
@@ -25,10 +27,7 @@ public class ClientController : Controller
     [HttpPost("clients/add/individual")]
     public async Task<IActionResult> AddIndividualClient([FromForm] AddClientIndividualDto client)
     {
-        if (!IsUserLoggedIn())
-        {
-            return BadRequest("User not logged in");
-        }
+
 
         try
         {
@@ -44,10 +43,7 @@ public class ClientController : Controller
     [HttpPost("clients/add/corporate")]
     public async Task<IActionResult> AddCorporateClient([FromForm] AddClientCompanyDto client)
     {
-        if (!IsUserLoggedIn())
-        {
-            return BadRequest("User not logged in");
-        }
+
 
         try
         {
@@ -64,23 +60,16 @@ public class ClientController : Controller
     public async Task<IActionResult> UpdateIndividualClient([FromForm] UpdateClientIndividualDto client)
     {
         User? user = await _userManager.GetUserAsync(User);
-
-
-        if (user == null)
-        {
-            return BadRequest("User not logged in");
-        }
-
         try
         {
             await _clientService.UpdateClientAsync(client, user.UserName);
             return RedirectToAction("IndividualClients");
         }
-        catch (AccessDeniedException e)
+        catch (AccessViolationException e)
         {
             return StatusCode(403, e.Message);
         }
-        catch (ClientNotFoundException e)
+        catch (NotFoundException e)
         {
             return BadRequest(e.Message);
         }
@@ -95,21 +84,16 @@ public class ClientController : Controller
     {
         User? user = await _userManager.GetUserAsync(User);
 
-        if (user == null)
-        {
-            return BadRequest("User not logged in");
-        }
-
         try
         {
             await _clientService.UpdateClientAsync(client, user.UserName);
             return RedirectToAction("CorporateClients");
         }
-        catch (AccessDeniedException e)
+        catch (AccessViolationException e)
         {
             return StatusCode(403, e.Message);
         }
-        catch (ClientNotFoundException e)
+        catch (NotFoundException e)
         {
             return BadRequest(e.Message);
         }
@@ -126,17 +110,12 @@ public class ClientController : Controller
     {
         User? user = await _userManager.GetUserAsync(User);
 
-        if (user == null)
-        {
-            return BadRequest("User not logged in");
-        }
-
         try
         {
             await _clientService.DeleteClientAsync(IdClient, user.UserName);
             return RedirectToAction("IndividualClients");
         }
-        catch (CantDeleteCompanyException e)
+        catch (NotSupportedException e)
         {
             return BadRequest(e.Message);
         }
@@ -149,10 +128,6 @@ public class ClientController : Controller
     [HttpGet("clients/list/{type}")]
     public async Task<IActionResult> GetClientsList(string type)
     {
-        if (!IsUserLoggedIn())
-        {
-            return BadRequest("User not logged in");
-        }
 
         try
         {
@@ -168,11 +143,6 @@ public class ClientController : Controller
     [HttpGet("corporate-clients")]
     public async Task<IActionResult> CorporateClients()
     {
-        if (!IsUserLoggedIn())
-        {
-            return BadRequest("User not logged in");
-        }
-
         List<GetClientDto> clients = await _clientService.GetClientsListAsync("company");
         ClientViewModel model = new()
         {
@@ -193,11 +163,6 @@ public class ClientController : Controller
     [HttpGet("individual-clients")]
     public async Task<IActionResult> IndividualClients()
     {
-        if (!IsUserLoggedIn())
-        {
-            return BadRequest("User not logged in");
-        }
-
         List<GetClientDto> clients = await _clientService.GetClientsListAsync("individual");
         ClientViewModel model = new()
         {
@@ -216,8 +181,4 @@ public class ClientController : Controller
         return View(model);
     }
 
-    public bool IsUserLoggedIn()
-    {
-        return _userManager.GetUserAsync(User).Result != null;
-    }
 }
