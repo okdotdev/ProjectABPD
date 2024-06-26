@@ -73,8 +73,7 @@ var isAdmin = UserManager.GetRolesAsync(UserManager.GetUserAsync(User).Result).R
             }
         </tr>
         }
-        @if (isAdmin)
-        {
+
         <tr>
             <form asp-controller="Client" asp-action="AddIndividualClient" method="post">
                 <td>
@@ -100,7 +99,7 @@ var isAdmin = UserManager.GetRolesAsync(UserManager.GetUserAsync(User).Result).R
                 </td>
             </form>
         </tr>
-        }
+
         </tbody>
     </table>
 </main>

@@ -1,13 +1,16 @@
+using abcAPI.Models.TableModels;
+
 namespace abcAPI.Models;
 
-public  class Client
+public class Client
 {
     public int IdClient { get; set; }
     public string Address { get; set; }
     public string Email { get; set; }
     public string PhoneNumber { get; set; }
     public bool IsDeleted { get; set; } = false;
-
+    public List<ClientContract> ClientContracts { get; set; }
+    public List<Subscription> Subscriptions { get; set; }
 }
 
 public class ClientIndividual : Client
