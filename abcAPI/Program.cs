@@ -33,6 +33,7 @@ builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();
 builder.Services.AddScoped<IDiscountService, DiscountService>();
 builder.Services.AddScoped<IRevenueService, RevenueService>();
 builder.Services.AddScoped<IRaportService, RaportService>();
+
 builder.Services.AddHttpClient<RevenueService>();
 
 

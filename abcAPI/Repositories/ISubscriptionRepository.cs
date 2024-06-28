@@ -1,9 +1,11 @@
+using abcAPI.Models.DTOs;
 using abcAPI.Models.TableModels;
 
 namespace abcAPI.Repositories;
 
 public interface ISubscriptionRepository
 {
-    Task<IEnumerable<Subscription>> GetActiveSubscriptionsForClientAsync(int clientIdClient, int softwareId);
-    bool IsLoyalCustomer(int clientIdClient);
+    Task Subscribe(SubscribeDto subscribeDto);
+    Task Unsubscribe(SubscribeDto subscribeDto);
+    Task<List<GetSubscriptionDto>> GetSubscriptionsList();
 }

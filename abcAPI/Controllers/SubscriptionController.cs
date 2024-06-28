@@ -1,6 +1,7 @@
 using abcAPI.Exceptions;
 using abcAPI.Models.DTOs;
 using abcAPI.Models.ViewModels;
+using abcAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,11 +12,11 @@ namespace abcAPI.Controllers;
 [Authorize]
 public class SubscriptionController : Controller
 {
-    //ISubscriptionService _subscriptionService;
+    private ISubscriptionService _subscriptionService;
 
-    public SubscriptionController() //(ISubscriptionService subscriptionService)
+    public SubscriptionController(ISubscriptionService subscriptionService)
     {
-        //_subscriptionService = subscriptionService;
+        _subscriptionService = subscriptionService;
     }
 
 
@@ -24,7 +25,7 @@ public class SubscriptionController : Controller
     {
         try
         {
-            //await _subscriptionService.SubscribeAsync(subscribeDto);
+            await _subscriptionService.SubscribeAsync(subscribeDto);
             return RedirectToAction("Subscriptions");
         }
         catch (NotFoundException ex)
@@ -46,7 +47,7 @@ public class SubscriptionController : Controller
     {
         try
         {
-            //await _subscriptionService.UnsubscribeAsync(subscribeDto);
+            await _subscriptionService.UnsubscribeAsync(subscribeDto);
             return RedirectToAction("Subscriptions");
         }
         catch (NotFoundException ex)
@@ -68,7 +69,7 @@ public class SubscriptionController : Controller
     {
         try
         {
-            //var subscriptions = await _subscriptionService.GetSubscriptionsListAsync();
+            List<GetSubscriptionDto> subscriptions = await _subscriptionService.GetSubscriptionsListAsync();
             return Ok();
         }
         catch (NotFoundException ex)
@@ -88,7 +89,7 @@ public class SubscriptionController : Controller
     [HttpGet("view")]
     public async Task<IActionResult> Subscriptions()
     {
-        //List<GetSubscriptionDto> softwares = await _Service.GetSoftwaresAsync();
+        List<GetSubscriptionDto> subscriptions = await _subscriptionService.GetSubscriptionsListAsync();
         SubscriptionViewModel model = new()
         {
         };
