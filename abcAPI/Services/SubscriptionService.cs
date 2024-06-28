@@ -46,6 +46,14 @@ public class SubscriptionService : ISubscriptionService
         GetSoftwareDto software = await _softwareService.GetSoftwareAsync(subscribeDto.SoftwareId);
 
 
+        decimal yearlyPrice;
+
+        if (subscribeDto.IsMonthly)
+        {
+            yearlyPrice = subscribeDto.RenewalPrice * 12;
+        }
+        else yearlyPrice = subscribeDto.RenewalPrice;
+
         CreateContractDto createContractDto = new()
         {
             ClientId = subscribeDto.ClientId,
@@ -54,7 +62,7 @@ public class SubscriptionService : ISubscriptionService
             SoftwareId = subscribeDto.SoftwareId,
             AdditionalSupportYears = additionalSupportYears,
             Version = software.CurrentVersion,
-            Price = subscribeDto.RenewalPrice
+            Price = yearlyPrice
         };
 
         await _contractService.CreateContractAsync(createContractDto, true);

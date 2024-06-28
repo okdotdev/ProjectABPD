@@ -56,6 +56,12 @@ public class ContractService : IContractService
 
         decimal price = createContractDto.Price + (createContractDto.AdditionalSupportYears - 1) * 1000;
 
+        if (fromSubscription)
+        {
+            price = createContractDto.Price;
+        }
+
+
         //nie do końca zrozumiałem polecenie gdyż napisane jest że cena obejmuje wszystkie zniżki
         // a zaraz potem że Gdy dostępnych jest wiele zniżek, wybieramy najwyższą.
         //dlatego też założyłem że automatycznie obniżę cenę o największą dostępną zniżkę
