@@ -99,7 +99,7 @@ public class ContractRepository : IContractRepository
                 IsPaid = contract.IsPaid,
                 AmountPaid = contract.AmountPaid,
                 Version = contract.Version,
-                SoftwareName = contract.Software.Name,
+                //SoftwareName = contract.Software.Name,
                 AdditionalSupportYears = contract.AdditionalSupportYears,
                 IsSigned = contract.IsSigned
             }).ToList();
