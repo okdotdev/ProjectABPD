@@ -1,18 +1,18 @@
 @model abcAPI.Models.ViewModels.ContractViewModel
 @using abcAPI.Models.DTOs
-@using abcAPI.Models.TableModels
-@using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.Mvc.TagHelpers
-@inject UserManager<User> UserManager
+
 
 @{
     ViewData["Title"] = "Contracts";
-    bool isAdmin = UserManager.GetRolesAsync(UserManager.GetUserAsync(User).Result).Result.Contains("Admin");
 }
 
 <main class="container mt-4">
     <h1>Contracts Management</h1>
     <table class="table table-striped">
+        <form asp-controller="Raport" asp-action="GetContractsPdf" method="get">
+            <button type="submit" class="btn btn-outline-primary">Download PDF</button>
+        </form>
         <thead>
         <tr>
             <th>Customer Id</th>
@@ -36,8 +36,8 @@
                 <td>@contractDto.SoftwareId</td>
                 <td>@contractDto.StartDate</td>
                 <td>@contractDto.EndDate</td>
-                <td>@contractDto.Price</td>
-                <td>@contractDto.AmountPaid</td>
+                <td>@contractDto.Price PLN</td>
+                <td>@contractDto.AmountPaid PLN</td>
                 <td>@contractDto.IsPaid</td>
                 <td>@contractDto.IsSigned</td>
                 <td>@contractDto.Version</td>

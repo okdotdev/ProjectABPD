@@ -36,7 +36,7 @@ public class AppDbContext : IdentityDbContext<User>
             new IdentityRole { Id = "2", Name = "User", NormalizedName = "USER" }
         );
 
-        var hasher = new PasswordHasher<User>();
+        PasswordHasher<User> hasher = new();
         modelBuilder.Entity<User>().HasData(
             new User
             {
@@ -61,7 +61,7 @@ public class AppDbContext : IdentityDbContext<User>
             new IdentityUserRole<string> { UserId = "2", RoleId = "2" }
         );
 
-        modelBuilder.Entity<ClientIndividual>().HasData(
+       /* modelBuilder.Entity<ClientIndividual>().HasData(
             new ClientIndividual
             {
                 IdClient = 1,
@@ -236,6 +236,6 @@ public class AppDbContext : IdentityDbContext<User>
                 ClientId = 4,
                 ContractId = 2
             }
-        );
+        ); */
     }
 }

@@ -27,8 +27,6 @@ public class ClientController : Controller
     [HttpPost("clients/add/individual")]
     public async Task<IActionResult> AddIndividualClient([FromForm] AddClientIndividualDto client)
     {
-
-
         try
         {
             await _clientService.AddClientAsync(client);
@@ -43,8 +41,6 @@ public class ClientController : Controller
     [HttpPost("clients/add/corporate")]
     public async Task<IActionResult> AddCorporateClient([FromForm] AddClientCompanyDto client)
     {
-
-
         try
         {
             await _clientService.AddClientAsync(client);
@@ -106,13 +102,18 @@ public class ClientController : Controller
 
     //Form nie obsługuje delete więc trzeba zrobić posta
     [HttpPost("clients/delete/individual")]
-    public async Task<IActionResult> DeleteIndividualClient([FromForm] int IdClient)
+    public async Task<IActionResult> DeleteIndividualClient([FromForm] int idClient)
     {
         User? user = await _userManager.GetUserAsync(User);
 
+        if (user == null)
+        {
+            return Unauthorized();
+        }
+
         try
         {
-            await _clientService.DeleteClientAsync(IdClient, user.UserName);
+            await _clientService.DeleteClientAsync(idClient, user.UserName);
             return RedirectToAction("IndividualClients");
         }
         catch (NotSupportedException e)
@@ -128,7 +129,6 @@ public class ClientController : Controller
     [HttpGet("clients/list/{type}")]
     public async Task<IActionResult> GetClientsList(string type)
     {
-
         try
         {
             List<GetClientDto> clientsList = await _clientService.GetClientsListAsync(type);
@@ -140,7 +140,7 @@ public class ClientController : Controller
         }
     }
 
-    [HttpGet("corporate-clients")]
+
     public async Task<IActionResult> CorporateClients()
     {
         List<GetClientDto> clients = await _clientService.GetClientsListAsync("company");
@@ -160,7 +160,7 @@ public class ClientController : Controller
         return View(model);
     }
 
-    [HttpGet("individual-clients")]
+
     public async Task<IActionResult> IndividualClients()
     {
         List<GetClientDto> clients = await _clientService.GetClientsListAsync("individual");
@@ -180,5 +180,4 @@ public class ClientController : Controller
 
         return View(model);
     }
-
 }

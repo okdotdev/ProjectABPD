@@ -32,10 +32,8 @@ builder.Services.AddScoped<IContractService, ContractService>();
 builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();
 builder.Services.AddScoped<IDiscountService, DiscountService>();
 builder.Services.AddScoped<IRevenueService, RevenueService>();
+builder.Services.AddScoped<IRaportService, RaportService>();
 builder.Services.AddHttpClient<RevenueService>();
-
-
-
 
 
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -79,6 +77,8 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
+
+builder.Services.AddHostedService<DataSeederHostedService>();
 
 WebApplication app = builder.Build();
 

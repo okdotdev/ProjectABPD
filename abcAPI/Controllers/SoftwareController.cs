@@ -78,7 +78,6 @@ public class SoftwareController : Controller
         }
     }
 
-    [HttpGet]
     public async Task<IActionResult> Software()
     {
 

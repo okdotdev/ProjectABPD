@@ -22,7 +22,7 @@ public class UserController : Controller
     }
 
 
-    [HttpGet]
+
     [AllowAnonymous]
     public IActionResult Login()
     {
@@ -60,7 +60,6 @@ public class UserController : Controller
         return RedirectToAction("Login", "User");
     }
 
-    [HttpGet]
     public IActionResult ControlPanel()
     {
         return View();

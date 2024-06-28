@@ -4,7 +4,6 @@ using abcAPI.Models.TableModels;
 using abcAPI.Models.ViewModels;
 using abcAPI.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace abcAPI.Controllers;
@@ -15,12 +14,11 @@ namespace abcAPI.Controllers;
 public class ContractController : Controller
 {
     private readonly IContractService _contractService;
-    private readonly UserManager<User> _userManager;
 
-    public ContractController(IContractService contractService, UserManager<User> userManager)
+
+    public ContractController(IContractService contractService)
     {
         _contractService = contractService;
-        _userManager = userManager;
     }
 
     [HttpPost("create")]
@@ -68,12 +66,13 @@ public class ContractController : Controller
     public async Task<IActionResult> Payment(int contractId)
     {
         Contract? contract = await _contractService.GetContractByIdAsync(contractId);
+
         if (contract == null)
         {
             return NotFound("Contract not found");
         }
 
-        PaymentViewModel model = new PaymentViewModel
+        PaymentViewModel model = new()
         {
             ContractId = contractId,
             LeftAmount = contract.Price - contract.AmountPaid
@@ -130,7 +129,6 @@ public class ContractController : Controller
         }
     }
 
-    [HttpGet]
     public async Task<IActionResult> Contracts()
     {
         List<GetContractDto> contracts = await _contractService.GetContractsAsync();

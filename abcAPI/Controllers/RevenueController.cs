@@ -20,7 +20,7 @@ namespace abcAPI.Controllers
         {
             try
             {
-                var revenue = await _revenueService.CalculateRevenueAsync(requestDto);
+                RevenueResponseDto revenue = await _revenueService.CalculateRevenueAsync(requestDto);
                 return Ok(revenue.CurrentRevenue);
             }
             catch (Exception ex)
@@ -34,7 +34,7 @@ namespace abcAPI.Controllers
         {
             try
             {
-                var revenue = await _revenueService.CalculateRevenueAsync(requestDto);
+                RevenueResponseDto revenue = await _revenueService.CalculateRevenueAsync(requestDto);
                 return Ok(revenue.ProjectedRevenue);
             }
             catch (Exception ex)
@@ -43,13 +43,11 @@ namespace abcAPI.Controllers
             }
         }
 
-        [HttpGet("real")]
         public IActionResult RealRevenue()
         {
             return View("Real");
         }
 
-        [HttpGet("projected")]
         public IActionResult ProjectedRevenue()
         {
             return View("Projected");
