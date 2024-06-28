@@ -10,11 +10,11 @@ namespace abcAPI.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class SubscriptionController : Controller
+public class SubscriptionsController : Controller
 {
     private ISubscriptionService _subscriptionService;
 
-    public SubscriptionController(ISubscriptionService subscriptionService)
+    public SubscriptionsController(ISubscriptionService subscriptionService)
     {
         _subscriptionService = subscriptionService;
     }
@@ -86,14 +86,18 @@ public class SubscriptionController : Controller
         }
     }
 
-    [HttpGet("view")]
+    [HttpGet("subscriptions")]
     public async Task<IActionResult> Subscriptions()
     {
         List<GetSubscriptionDto> subscriptions = await _subscriptionService.GetSubscriptionsListAsync();
         SubscriptionViewModel model = new()
         {
+            Subscriptions = subscriptions
         };
 
         return View(model);
     }
+
+
+
 }

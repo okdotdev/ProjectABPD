@@ -7,6 +7,5 @@ public class SubscribeDto
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
     public bool IsMonthly { get; set; } // false = yearly
-    public decimal Price { get; set; } // for full year
-    public decimal RenewalPrice { get; set; } // for monthly
+    public decimal RenewalPrice { get; set; } // for full period
 }

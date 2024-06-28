@@ -4,7 +4,8 @@
 
 
 @{
-    ViewData["Title"] = "Subscriptions";
+ViewData["Title"] = "Subscriptions";
+Layout = "_Layout";
 }
 
 <main class="container mt-4">
@@ -15,32 +16,30 @@
             <th>Id</th>
             <th>Software Id</th>
             <th>Client Id</th>
+            <th>Contract Id</th>
             <th>StartDate</th>
             <th>EndDate</th>
-            <th>Price</th>
             <th>Renewal Price</th>
             <th>Renewed Period</th>
-
         </tr>
         </thead>
         <tbody>
         @foreach (GetSubscriptionDto subscriptionDto in Model.Subscriptions)
         {
-            <tr>
-                <td>@subscriptionDto.Id</td>
-                <td>@subscriptionDto.SoftwareId</td>
-                <td>@subscriptionDto.ClientId</td>
-                <td>@subscriptionDto.ContractId</td>
-                <td>@subscriptionDto.StartDate</td>
-                <td>@subscriptionDto.EndDate</td>
-                <td>@subscriptionDto.Price PLN</td>
-                <td>@subscriptionDto.RenewalPrice PLN</td>
-                <td>@(subscriptionDto.IsMonthly ? "Renewed Montly" : "Renewed Yearly")</td>
-            </tr>
+        <tr>
+            <td>@subscriptionDto.Id</td>
+            <td>@subscriptionDto.SoftwareId</td>
+            <td>@subscriptionDto.ClientId</td>
+            <td>@subscriptionDto.ContractId</td>
+            <td>@subscriptionDto.StartDate</td>
+            <td>@subscriptionDto.EndDate</td>
+            <td>@subscriptionDto.RenewalPrice PLN</td>
+            <td>@(subscriptionDto.IsMonthly ? "Renewed Monthly" : "Renewed Yearly")</td>
+        </tr>
         }
 
         <tr>
-            <form asp-controller="Subscription" asp-action="Subscribe" method="post">
+            <form asp-controller="Subscriptions" asp-action="Subscribe" method="post">
                 <td>
                     <input type="text" name="Customer id" class="form-control" placeholder=" Customer" required/>
                 </td>
@@ -54,28 +53,16 @@
                     <input type="date" name="EndDate" class="form-control" placeholder="EndDate" required/>
                 </td>
                 <td>
-                    <input type="text" name="Price" class="form-control" placeholder="Base Price" required/>
+                    <input type="checkbox" name="IsMonthly" class="form-control" placeholder="Renewal Monthly?" required/>
                 </td>
 
                 <td>
-                    <input type="text" name="IsPaid" class="form-control" placeholder="IsPaid" required/>
+                    <input type="text" name="RenewalPrice" class="form-control" placeholder="Renewal Price" required/>
                 </td>
 
                 <td>
-                    <input type="text" name="IsSigned" class="form-control" placeholder="IsSigned" required/>
-                </td>
-
-                <td>
-                    <input type="text" name="Version" class="form-control" placeholder="Version" required/>
-                </td>
-
-                <td>
-                    <input type="text" name="AdditionalSupportYears" class="form-control" placeholder="AdditionalSupportYears" required/>
-                </td>
-
-
-                <td>
-                    <button type="submit" class="btn btn-success">Create Contract</button>
+                    <button type="submit" class="btn btn-success">Add New Subscription</button>
+                    <p>Signed contract will be created automatically</p>
                 </td>
             </form>
         </tr>

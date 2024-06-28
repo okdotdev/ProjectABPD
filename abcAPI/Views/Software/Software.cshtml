@@ -1,11 +1,8 @@
+@using abcAPI.Models.DTOs
 @model abcAPI.Models.ViewModels.SoftwareViewModel
-@using abcAPI.Models.TableModels
-@using Microsoft.AspNetCore.Identity
-@inject UserManager<User> UserManager
 
 @{
 ViewData["Title"] = "Software";
-var isAdmin = UserManager.GetRolesAsync(UserManager.GetUserAsync(User).Result).Result.Contains("Admin");
 }
 
 <main class="container mt-4">
@@ -20,7 +17,7 @@ var isAdmin = UserManager.GetRolesAsync(UserManager.GetUserAsync(User).Result).R
         </tr>
         </thead>
         <tbody>
-        @foreach (var software in Model.Softwares)
+        @foreach (GetSoftwareDto software in Model.Softwares)
         {
         <tr>
             <td>@software.Name</td>
