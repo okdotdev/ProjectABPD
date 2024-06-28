@@ -115,7 +115,7 @@ public class ContractController : Controller
     }
 
 
-    [HttpGet("contracts")]
+    [HttpGet("list")]
     public async Task<IActionResult> GetContracts()
     {
         try
@@ -128,7 +128,7 @@ public class ContractController : Controller
             return BadRequest(ex.Message);
         }
     }
-
+    [HttpGet("view")]
     public async Task<IActionResult> Contracts()
     {
         List<GetContractDto> contracts = await _contractService.GetContractsAsync();

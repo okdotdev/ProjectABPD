@@ -1,11 +1,13 @@
 using abcAPI.Models.DTOs;
 using abcAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace abcAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class RevenueController : Controller
     {
         private readonly IRevenueService _revenueService;
