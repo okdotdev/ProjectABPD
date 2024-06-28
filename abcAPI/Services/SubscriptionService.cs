@@ -76,6 +76,11 @@ public class SubscriptionService : ISubscriptionService
 
         decimal firstPaymentValue = subscribeDto.RenewalPrice -= discount.Value;
 
+        if (firstPaymentValue < 0)
+        {
+            firstPaymentValue = 0;
+        }
+
         //sprawdzamy, czy klient ma już umowę na to oprogramowanie
 
 

@@ -63,6 +63,9 @@ public class ContractService : IContractService
         {
             Discount? discount = await _discountService.GetBiggestDiscountAsync();
             price = price - discount.Value;
+
+            if (price < 0)
+                price = 0;
         }
         catch (NotFoundException e)
         {
@@ -166,7 +169,6 @@ public class ContractService : IContractService
     {
         return await _contractRepository.ClientHasPaidForSubscriptionAsync(contractId, isMonthly);
     }
-
 
 
     public async Task<List<PaymentDto>> GetPaymentsForContract(GetContractDto contract)
