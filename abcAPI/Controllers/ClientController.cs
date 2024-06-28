@@ -140,7 +140,7 @@ public class ClientController : Controller
         }
     }
 
-
+    [HttpGet("corporate/view")]
     public async Task<IActionResult> CorporateClients()
     {
         List<GetClientDto> clients = await _clientService.GetClientsListAsync("company");
@@ -160,7 +160,7 @@ public class ClientController : Controller
         return View(model);
     }
 
-
+    [HttpGet("individual/view")]
     public async Task<IActionResult> IndividualClients()
     {
         List<GetClientDto> clients = await _clientService.GetClientsListAsync("individual");
