@@ -13,11 +13,8 @@ public class SubscriptionEfConfig : IEntityTypeConfiguration<Subscription>
 
         builder.Property(e => e.OfferName).IsRequired().HasMaxLength(100);
 
-
-        builder.Property(e => e.StartDate).IsRequired();
-        builder.Property(e => e.EndDate).IsRequired();
         builder.Property(e => e.PriceOfRenewal).IsRequired().HasColumnType("decimal(18,2)");
-        builder.Property(e => e.RenewalPeriod).IsRequired().HasMaxLength(50);
+        builder.Property(e => e.IsMonthly).IsRequired().HasMaxLength(50);
         builder.Property(e => e.IsActive).IsRequired();
 
         builder.HasOne(e => e.Contract)

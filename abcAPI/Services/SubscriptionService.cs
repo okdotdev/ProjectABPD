@@ -14,7 +14,24 @@ public class SubscriptionService : ISubscriptionService
 
     public async Task SubscribeAsync(SubscribeDto subscribeDto)
     {
-        await _subscriptionRepository.Subscribe(subscribeDto);
+
+        if (subscribeDto.StartDate > subscribeDto.EndDate)
+        {
+            throw new ArgumentException("End date should be greater than start date");
+        }
+
+        switch (subscribeDto.EndDate.Subtract(subscribeDto.StartDate).TotalDays)
+        {
+            case < 30:
+                throw new ArgumentException("Subscription time should be at least 1 month");
+            case > 730:
+                throw new ArgumentException("Subscription time should be at most 2 years");
+            default:
+                await _subscriptionRepository.Subscribe(subscribeDto);
+                break;
+        }
+
+
     }
 
     public async Task UnsubscribeAsync(SubscribeDto subscribeDto)

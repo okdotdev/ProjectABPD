@@ -4,4 +4,9 @@ public class SubscribeDto
 {
     public int SoftwareId { get; set; }
     public int ClientId { get; set; }
+    public DateTime StartDate { get; set; }
+    public DateTime EndDate { get; set; }
+    public bool IsMonthly { get; set; } // false = yearly
+    public decimal Price { get; set; } // for full year
+    public decimal RenewalPrice { get; set; } // for monthly
 }

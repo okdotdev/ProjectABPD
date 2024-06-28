@@ -15,11 +15,13 @@
         </form>
         <thead>
         <tr>
+            <th>Software Name</th>
             <th>Customer Id</th>
             <th>Software Id</th>
             <th>StartDate</th>
             <th>EndDate</th>
             <th>Price</th>
+            <th>Is Subscription</th>
             <th>Amount Payed</th>
             <th>IsPaid</th>
             <th>IsSigned</th>
@@ -32,11 +34,13 @@
         @foreach (GetContractDto contractDto in Model.Contracts)
         {
             <tr>
+                <td>@contractDto.SoftwareName</td>
                 <td>@contractDto.CustomerId</td>
                 <td>@contractDto.SoftwareId</td>
                 <td>@contractDto.StartDate</td>
                 <td>@contractDto.EndDate</td>
                 <td>@contractDto.Price PLN</td>
+                <td>@contractDto.IsSubscription</td>
                 <td>@contractDto.AmountPaid PLN</td>
                 <td>@contractDto.IsPaid</td>
                 <td>@contractDto.IsSigned</td>
