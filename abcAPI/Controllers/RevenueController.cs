@@ -30,9 +30,11 @@ public class RevenueController : Controller
             }
 
             decimal revenue = await _revenueService.CalculateRealRevenueAsync(requestDto);
-            var model = new RevenueViewModel { Revenue = revenue };
+            RevenueViewModel model = new RevenueViewModel { Revenue = revenue };
             return View("Real", model);
         }
+
+
         catch (NotFoundException ex)
         {
             return NotFound(ex.Message);
@@ -52,12 +54,18 @@ public class RevenueController : Controller
     }
 
     [HttpPost("calculate/revenue/projected")]
-    public async Task<IActionResult> CalculateProjectedRevenue([FromBody] RevenueRequestDto requestDto)
+    public async Task<IActionResult> CalculateProjectedRevenue([FromForm] RevenueRequestDto requestDto)
     {
         try
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             decimal revenue = await _revenueService.CalculateProjectedRevenueAsync(requestDto);
-            return Ok(revenue);
+            RevenueViewModel model = new RevenueViewModel { Revenue = revenue };
+            return View("Projected", model);
         }
         catch (NotFoundException ex)
         {

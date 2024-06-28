@@ -10,14 +10,15 @@
     <form asp-controller="Revenue" asp-action="CalculateRealRevenue" method="post">
         <div class="form-group">
             <label for="ProductId">Product ID</label>
-            <input type="number" class="form-control" id="ProductId" name="ProductId" placeholder="Enter product ID (or 0 for default)">
-            <P>default is calculation for the whole company</P>
+            <input type="number" class="form-control" id="ProductId" name="ProductId" placeholder="Enter product ID (or 0 for revenue of company)">
         </div>
-        <div class="form-group">
+
+        <!--   <div class="form-group">
             <label for="TargetCurrency">Currency</label>
-            <input type="text" class="form-control" id="TargetCurrency" name="TargetCurrency" placeholder="Enter currency (or PL for default)">
-        </div>
+            <input type="text" class="form-control" id="TargetCurrency" name="TargetCurrency" placeholder="Enter currency (or PLN for default)">
+        </div>-->
         <button type="submit" class="btn btn-primary">Calculate</button>
+
     </form>
 
     @if (Model != null && Model.Revenue.HasValue)

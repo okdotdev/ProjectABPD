@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using abcAPI.Models.DTOs;
 
 
@@ -18,9 +19,67 @@ public class RevenueService : IRevenueService
         _httpClientFactory = httpClientFactory;
     }
 
-    public Task<decimal> CalculateProjectedRevenueAsync(RevenueRequestDto requestDto)
+    public async Task<decimal> CalculateProjectedRevenueAsync(RevenueRequestDto requestDto)
     {
-        throw new NotImplementedException();
+        List<GetContractDto> contracts;
+        List<GetSubscriptionDto> subscriptions;
+
+        decimal sum = 0;
+
+        if (requestDto == null)
+        {
+            throw new ArgumentNullException(nameof(requestDto), "Request DTO cannot be null.");
+        }
+
+        if (requestDto.ProductId != 0)
+        {
+            contracts = (await _contractService.GetContractsAsync())
+                .Where(c => c.SoftwareId == requestDto.ProductId).ToList();
+            subscriptions = (await _subscriptionService.GetSubscriptionsListAsync())
+                .Where(s => s.SoftwareId == requestDto.ProductId).ToList();
+        }
+        else
+        {
+            contracts = await _contractService.GetContractsAsync();
+            subscriptions = await _subscriptionService.GetSubscriptionsListAsync();
+        }
+
+        foreach (GetContractDto contract in contracts)
+        {
+            List<PaymentDto> payments = await _contractService.GetPaymentsForContract(contract);
+            sum += payments.Sum(p => p.Amount);
+            Console.WriteLine($" Contract {contract.Id} revenue: {sum}");
+        }
+
+        //project revenue from subscriptions
+
+        foreach (GetSubscriptionDto subscription in subscriptions)
+        {
+            DateTime currentDate = DateTime.Now;
+            decimal renewalPrice = subscription.RenewalPrice;
+            bool isMonthly = subscription.IsMonthly;
+
+            //jeśli isMontly to dodajemy renewal price za kazdy miesiąc od teraz do końca jeśli nie to każdy rok
+            if (isMonthly)
+            {
+                while (currentDate < subscription.EndDate)
+                {
+                    sum += renewalPrice;
+                    currentDate = currentDate.AddMonths(1);
+                }
+            }
+            else
+            {
+                while (currentDate < subscription.EndDate)
+                {
+                    sum += renewalPrice;
+                    currentDate = currentDate.AddYears(1);
+                }
+            }
+        }
+
+
+        return sum;
     }
 
     public async Task<decimal> CalculateRealRevenueAsync(RevenueRequestDto requestDto)
@@ -57,9 +116,13 @@ public class RevenueService : IRevenueService
         {
             List<PaymentDto> payments = await _contractService.GetPaymentsForContract(contract);
             sum += payments.Sum(p => p.Amount);
-            Console.WriteLine($"Testowy świr Contract {contract.Id} revenue: {sum}");
+            Console.WriteLine($" Contract {contract.Id} revenue: {sum}");
         }
 
+        //Niestety nie udało mi się zaimplementować przelicznika walut z jakiegoś powodu wyrzucało mi caly czas Nulla
+        //przy Rates, więc zdecydowałem się na usunięcie tej funkcjonalności
+
+        /*
         // Convert the sum to the target currency if necessary
         if (!string.IsNullOrEmpty(requestDto.TargetCurrency) && requestDto.TargetCurrency != "PLN")
         {
@@ -73,15 +136,19 @@ public class RevenueService : IRevenueService
             }
 
             string responseBody = await response.Content.ReadAsStringAsync();
-            var exchangeRate = JsonSerializer.Deserialize<ExchangeRate>(responseBody);
 
-            if (exchangeRate == null || !exchangeRate.Rates.ContainsKey(requestDto.TargetCurrency))
+            // Log the raw JSON response
+            Console.WriteLine($"Exchange rate API response: {responseBody}");
+
+            ExchangeRate? exchangeRate = JsonSerializer.Deserialize<ExchangeRate>(responseBody);
+
+            if (exchangeRate == null || exchangeRate.Rates == null || !exchangeRate.Rates.TryGetValue(requestDto.TargetCurrency, value: out decimal rate))
             {
                 throw new InvalidOperationException("Exchange rate data is invalid.");
             }
 
-            sum *= exchangeRate.Rates[requestDto.TargetCurrency];
-        }
+            sum *= rate;
+        } */
 
         return sum;
     }
@@ -89,5 +156,5 @@ public class RevenueService : IRevenueService
 
 public class ExchangeRate
 {
-    public Dictionary<string, decimal> Rates { get; set; }
+    [JsonPropertyName("rates")] public Dictionary<string, decimal> Rates { get; set; }
 }
