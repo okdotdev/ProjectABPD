@@ -21,11 +21,11 @@ namespace abcAPI.Controllers
         [HttpPost("calculate/revenue/real")]
         public async Task<IActionResult> CalculateRealRevenue([FromBody] RevenueRequestDto requestDto)
         {
-            try
-            {
+         //   try
+          //  {
                 decimal revenue = await _revenueService.CalculateRealRevenueAsync(requestDto);
-                return RedirectToAction("RealRevenue", revenue);
-            }
+                return Ok(revenue);
+          /*  }
             catch (NotFoundException ex)
             {
                 return NotFound(ex.Message);
@@ -34,20 +34,24 @@ namespace abcAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
+            catch (HttpRequestException ex)
+            {
+                return StatusCode(503, ex.Message);
+            }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
-            }
+            } */
         }
 
         [HttpPost("calculate/revenue/projected")]
         public async Task<IActionResult> CalculateProjectedRevenue([FromBody] RevenueRequestDto requestDto)
         {
-            try
-            {
+          //  try
+          //  {
                 decimal revenue = await _revenueService.CalculateProjectedRevenueAsync(requestDto);
-                return RedirectToAction("ProjectedRevenue",revenue);
-            }
+                return Ok(revenue);
+          /*  }
             catch (NotFoundException ex)
             {
                 return NotFound(ex.Message);
@@ -56,10 +60,14 @@ namespace abcAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
+            catch (HttpRequestException ex)
+            {
+                return StatusCode(503, ex.Message);
+            }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
-            }
+            } */
         }
 
         [HttpGet("view/real")]

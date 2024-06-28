@@ -28,8 +28,6 @@ public class SoftwareController : Controller
     [HttpPost("add")]
     public async Task<IActionResult> AddSoftware([FromForm] AddSoftwareDto software)
     {
-
-
         try
         {
             await _softwareService.AddSoftwareAsync(software);
@@ -44,8 +42,6 @@ public class SoftwareController : Controller
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetSoftware(int id)
     {
-
-
         try
         {
             GetSoftwareDto software = await _softwareService.GetSoftwareAsync(id);
@@ -65,8 +61,6 @@ public class SoftwareController : Controller
     [HttpGet("list")]
     public async Task<IActionResult> GetSoftwares()
     {
-
-
         try
         {
             List<GetSoftwareDto> softwares = await _softwareService.GetSoftwaresAsync();
@@ -78,9 +72,9 @@ public class SoftwareController : Controller
         }
     }
 
+    [HttpGet("view")]
     public async Task<IActionResult> Software()
     {
-
         List<GetSoftwareDto> softwares = await _softwareService.GetSoftwaresAsync();
         SoftwareViewModel model = new()
         {
@@ -89,7 +83,4 @@ public class SoftwareController : Controller
 
         return View(model);
     }
-
-
-
 }

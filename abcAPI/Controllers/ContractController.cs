@@ -22,10 +22,16 @@ public class ContractController : Controller
     }
 
     [HttpPost("create")]
-    public async Task<IActionResult> CreateContract([FromBody] CreateContractDto createContractDto)
+    public async Task<IActionResult> CreateContract([FromForm] CreateContractDto createContractDto)
     {
         try
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+
             await _contractService.CreateContractAsync(createContractDto, false);
             return RedirectToAction("Contracts");
         }
@@ -42,6 +48,7 @@ public class ContractController : Controller
             return StatusCode(500, ex.Message);
         }
     }
+
 
     [HttpPost("pay")]
     public async Task<IActionResult> PayForContract([FromForm] PaymentDto paymentDto)

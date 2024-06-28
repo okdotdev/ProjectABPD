@@ -5,6 +5,7 @@
 
 @{
     ViewData["Title"] = "Contracts";
+
 }
 
 <main class="container mt-4">
@@ -18,10 +19,6 @@
             <th>Start Date</th>
             <th>End Date</th>
             <th>Price</th>
-            <th>Is Subscription</th>
-            <th>Amount Payed</th>
-            <th>IsPaid</th>
-            <th>IsSigned</th>
             <th>Version</th>
             <th>AdditionalSupportYears</th>
             <th>Actions</th>
@@ -31,38 +28,26 @@
         <tr>
             <form asp-controller="Contract" asp-action="CreateContract" method="post">
                 <td>
-                    <input type="text" name="Customer id" class="form-control" placeholder=" Customer" required/>
+                    <input type="text" name="ClientId" class="form-control" placeholder="Customer Id" required />
                 </td>
                 <td>
-                    <input type="text" name="Software id" class="form-control" placeholder="Description" required/>
+                    <input type="text" name="SoftwareId" class="form-control" placeholder="Software Id" required />
                 </td>
                 <td>
-                    <input type="date" name="StartDate" class="form-control" placeholder="StartDate" required/>
+                    <input type="date" name="StartDate" class="form-control" placeholder="Start Date" required />
                 </td>
                 <td>
-                    <input type="date" name="EndDate" class="form-control" placeholder="EndDate" required/>
+                    <input type="date" name="EndDate" class="form-control" placeholder="End Date" required />
                 </td>
                 <td>
-                    <input type="text" name="Price" class="form-control" placeholder="Base Price" required/>
+                    <input type="number" name="Price" class="form-control" placeholder="Price" required />
                 </td>
-
                 <td>
-                    <input type="text" name="IsPaid" class="form-control" placeholder="IsPaid" required/>
+                    <input type="text" name="Version" class="form-control" placeholder="Version" required />
                 </td>
-
                 <td>
-                    <input type="text" name="IsSigned" class="form-control" placeholder="IsSigned" required/>
+                    <input type="text" name="AdditionalSupportYears" class="form-control" placeholder="Additional Support Years" required />
                 </td>
-
-                <td>
-                    <input type="text" name="Version" class="form-control" placeholder="Version" required/>
-                </td>
-
-                <td>
-                    <input type="text" name="AdditionalSupportYears" class="form-control" placeholder="AdditionalSupportYears" required/>
-                </td>
-
-
                 <td>
                     <button type="submit" class="btn btn-success">Create Contract</button>
                 </td>

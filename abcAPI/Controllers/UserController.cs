@@ -22,7 +22,7 @@ public class UserController : Controller
     }
 
 
-
+    [HttpGet("login/view")]
     [AllowAnonymous]
     public IActionResult Login()
     {
@@ -30,7 +30,7 @@ public class UserController : Controller
     }
 
 
-    [HttpPost]
+    [HttpPost("login")]
     [AllowAnonymous]
     public async Task<IActionResult> Login([FromForm] LoginViewModel model)
     {
@@ -52,7 +52,7 @@ public class UserController : Controller
         return View(model);
     }
 
-    [HttpPost]
+    [HttpPost("logout")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Logout()
     {
@@ -60,6 +60,7 @@ public class UserController : Controller
         return RedirectToAction("Login", "User");
     }
 
+    [HttpGet("view/control-panel")]
     public IActionResult ControlPanel()
     {
         return View();
