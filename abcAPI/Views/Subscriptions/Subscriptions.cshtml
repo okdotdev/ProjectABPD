@@ -85,7 +85,11 @@
                 <td>@subscriptionDto.RenewalPrice PLN</td>
                 <td>@(subscriptionDto.IsMonthly ? "Renewed Monthly" : "Renewed Yearly")</td>
                 <td>
-                    <a asp-controller="Subscriptions" asp-action="PayForSubscription" asp-route-id="@subscriptionDto.Id" class="btn btn-primary">Register Payment</a>
+                    <form asp-controller="Subscriptions" asp-action="PayForSubscription" method="post">
+                        <input type="hidden" name="ContractId" value="@subscriptionDto.ContractId" />
+                        <input type="number" name="Amount" step="0.01" placeholder="Amount" required class="form-control" />
+                        <button type="submit" class="btn btn-primary">Register Payment</button>
+                    </form>
                 </td>
             </tr>
         }

@@ -7,4 +7,5 @@ public interface ISubscriptionRepository
 {
     Task Subscribe(SubscribeDto subscribeDto, int contractId);
     Task<List<GetSubscriptionDto>> GetSubscriptionsList();
+    Task<Subscription> GetSubscription(int contractId);
 }

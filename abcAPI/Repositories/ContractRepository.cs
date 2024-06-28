@@ -54,6 +54,12 @@ public class ContractRepository : IContractRepository
         return contract.Id;
     }
 
+    public Task<bool> ClientHasPaidForSubscriptionAsync(int contractId, bool isMonthly)
+    {
+        List<Payment> payments = _context.Payments.Where(p => p.ContractId == contractId).ToList();
+        return Task.FromResult(isMonthly ? payments.Any(p => p.Date >= DateTime.Now.AddMonths(-1)) : payments.Any(p => p.Date >= DateTime.Now.AddYears(-1)));
+    }
+
     public async Task<List<GetContractDto>> GetContractsAsync()
     {
         DateTime currentDate = DateTime.Now;
@@ -148,13 +154,15 @@ public class ContractRepository : IContractRepository
     public async Task<bool> ClientHasContractForSoftwareAsync(int clientId, int softwareId)
     {
         return await _context.Contracts.AnyAsync(c => c.ClientContracts.Any(cc => cc.ClientId == clientId) &&
-                                                      c.SoftwareId == softwareId && c.IsSigned && c.EndDate >= DateTime.Now);
+                                                      c.SoftwareId == softwareId && c.IsSigned &&
+                                                      c.EndDate >= DateTime.Now);
     }
 
     public async Task<bool> ClientHasContractForAnySoftwareAsync(int clientId)
     {
-        return await _context.Contracts.AnyAsync(c => c.ClientContracts.Any(cc => cc.ClientId == clientId) && c.IsSigned &&
-                                           c.EndDate >= DateTime.Now);
+        return await _context.Contracts.AnyAsync(c =>
+            c.ClientContracts.Any(cc => cc.ClientId == clientId) && c.IsSigned &&
+            c.EndDate >= DateTime.Now);
     }
 
     public async Task CreateContractAsync(Contract contract, int clientId)

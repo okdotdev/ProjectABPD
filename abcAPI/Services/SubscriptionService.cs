@@ -89,6 +89,7 @@ public class SubscriptionService : ISubscriptionService
         if (await _contractService.ClientHasContractForAnySoftwareAsync(subscribeDto.ClientId))
         {
             firstPaymentValue *= 0.95m;
+            subscribeDto.RenewalPrice *= 0.95m;
         }
 
         await _contractService.CreatePaymentAsync(firstPaymentValue, contractId);
@@ -104,8 +105,25 @@ public class SubscriptionService : ISubscriptionService
         return await _subscriptionRepository.GetSubscriptionsList();
     }
 
-    public Task PayForSubscriptionAsync(PaymentDto payForSubscriptionDto)
+    public async Task PayForSubscriptionAsync(PaymentDto payForSubscriptionDto)
     {
-        throw new NotImplementedException();
+        Subscription subscription = await _subscriptionRepository.GetSubscription(payForSubscriptionDto.ContractId);
+
+        if (payForSubscriptionDto.Amount != subscription.PriceOfRenewal)
+        {
+            throw new ArgumentException("Payment must equal renewal price");
+        }
+
+        //zniżka dla lojalnych klientów jest już nałożona na cenę subskrypcji
+
+        //sprawdźmy czy client już zapłacił za tą subskrypcję
+
+        if (await _contractService.ClientHasPaidForSubscriptionAsync(payForSubscriptionDto.ContractId,
+                subscription.IsMonthly))
+        {
+            throw new ArgumentException("Client has already paid for this subscription");
+        }
+
+        await _contractService.CreatePaymentAsync(payForSubscriptionDto.Amount, payForSubscriptionDto.ContractId);
     }
 }

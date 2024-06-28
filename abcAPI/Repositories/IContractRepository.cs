@@ -16,4 +16,5 @@ public interface IContractRepository
     Task UpdateContractAsync(Contract contract);
     Task AddPaymentAsync(Payment payment);
     Task<int> GetContractIdAsync(CreateContractDto createContractDto);
+    Task<bool> ClientHasPaidForSubscriptionAsync(int contractId ,bool isMonthly);
 }

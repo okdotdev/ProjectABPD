@@ -23,23 +23,23 @@ public class SubscriptionsController : Controller
     [HttpPost("subscribe")]
     public async Task<IActionResult> Subscribe([FromForm] SubscribeDto subscribeDto)
     {
-      //  try
-      //  {
+        try
+        {
             await _subscriptionService.SubscribeAsync(subscribeDto);
             return RedirectToAction("Subscriptions");
-     //   }
-      //  catch (NotFoundException ex)
-       // {
-          //  return NotFound(ex.Message);
-     //   }
-      //  catch (ArgumentException ex)
-      //  {
-      //      return BadRequest(ex.Message);
-     //   }
-      //  catch (Exception ex)
-      //  {
-      //      return StatusCode(500, ex.Message);
-      //  }
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+           return StatusCode(500, ex.Message);
+        }
     }
 
 

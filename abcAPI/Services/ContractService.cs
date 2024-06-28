@@ -161,4 +161,9 @@ public class ContractService : IContractService
     {
         return await _contractRepository.ClientHasContractForAnySoftwareAsync(subscribeDtoClientId);
     }
+
+    public async Task<bool> ClientHasPaidForSubscriptionAsync(int contractId, bool isMonthly)
+    {
+        return await _contractRepository.ClientHasPaidForSubscriptionAsync(contractId, isMonthly);
+    }
 }

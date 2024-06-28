@@ -1,3 +1,4 @@
+using abcAPI.Exceptions;
 using abcAPI.Models;
 using abcAPI.Models.DTOs;
 using abcAPI.Models.TableModels;
@@ -83,5 +84,17 @@ public class SubscriptionRepository : ISubscriptionRepository
 
 
         return getSubscriptionDtos;
+    }
+
+    public async Task<Subscription> GetSubscription(int contractId)
+    {
+        Subscription? subscription = await _context.Subscriptions.FirstOrDefaultAsync(s => s.ContractId == contractId);
+
+        if (subscription == null)
+        {
+            throw new NotFoundException("Subscription not found");
+        }
+
+        return subscription;
     }
 }
