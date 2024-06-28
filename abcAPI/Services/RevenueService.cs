@@ -23,41 +23,12 @@ namespace abcAPI.Services
 
         public async Task<RevenueResponseDto> CalculateRevenueAsync(RevenueRequestDto requestDto)
         {
-            var contracts = await _contractService.GetContractsAsync();
-            var subscriptions = new List<Subscription>(); // await _subscriptionService.GetAllSubscriptionsAsync();
-
-            if (!string.IsNullOrEmpty(requestDto.ProductName))
-            {
-                contracts = contracts.Where(c => c.SoftwareName == requestDto.ProductName).ToList();
-                subscriptions = subscriptions.Where(s => s.Software.Name == requestDto.ProductName).ToList();
-            }
-
-            decimal currentRevenue = contracts.Where(c => c.IsPaid).Sum(c => c.Price) + subscriptions.Sum(s => s.Price);
-            decimal projectedRevenue = contracts.Sum(c => c.Price) + subscriptions.Sum(s => s.Price);
-
-            if (!string.IsNullOrEmpty(requestDto.Currency) && requestDto.Currency.ToUpper() != "PLN")
-            {
-                var exchangeRate = await GetExchangeRateAsync("PLN", requestDto.Currency);
-                currentRevenue *= exchangeRate;
-                projectedRevenue *= exchangeRate;
-            }
-
-            return new RevenueResponseDto
-            {
-                CurrentRevenue = currentRevenue,
-                ProjectedRevenue = projectedRevenue,
-                Currency = string.IsNullOrEmpty(requestDto.Currency) ? "PLN" : requestDto.Currency.ToUpper()
-            };
+            throw new NotImplementedException();
         }
 
         private async Task<decimal> GetExchangeRateAsync(string fromCurrency, string toCurrency)
         {
-            var client = _httpClientFactory.CreateClient();
-            var response =
-                await client.GetStringAsync(
-                    $"https://api.exchangeratesapi.io/latest?base={fromCurrency}&symbols={toCurrency}");
-            var exchangeData = JsonSerializer.Deserialize<ExchangeRateResponse>(response);
-            return exchangeData.Rates[toCurrency];
+            throw new NotImplementedException();
         }
     }
 

@@ -11,24 +11,19 @@ public class SubscriptionEfConfig : IEntityTypeConfiguration<Subscription>
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).UseIdentityColumn();
 
-        builder.Property(e => e.SoftwareId).IsRequired();
-        builder.Property(e => e.ClientId).IsRequired();
+        builder.Property(e => e.OfferName).IsRequired().HasMaxLength(100);
+
+
         builder.Property(e => e.StartDate).IsRequired();
         builder.Property(e => e.EndDate).IsRequired();
-        builder.Property(e => e.Price).IsRequired().HasColumnType("decimal(18,2)");
+        builder.Property(e => e.PriceOfRenewal).IsRequired().HasColumnType("decimal(18,2)");
         builder.Property(e => e.RenewalPeriod).IsRequired().HasMaxLength(50);
         builder.Property(e => e.IsActive).IsRequired();
 
-        builder.HasOne(e => e.Software)
+        builder.HasOne(e => e.Contract)
             .WithMany(e => e.Subscriptions)
-            .HasForeignKey(e => e.SoftwareId);
+            .HasForeignKey(e => e.ContractId);
 
-        builder.HasOne(e => e.Client)
-            .WithMany(e => e.Subscriptions)
-            .HasForeignKey(e => e.ClientId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        builder.HasQueryFilter(s => !s.Client.IsDeleted);
 
         builder.ToTable("Subscriptions");
     }

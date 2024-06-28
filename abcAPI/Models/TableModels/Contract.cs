@@ -15,4 +15,5 @@ public class Contract
     public bool IsSigned { get; set; }
     public List<ClientContract> ClientContracts { get; set; }
     public List<Payment> Payments { get; set; }
+    public List<Subscription> Subscriptions { get; set; }
 }

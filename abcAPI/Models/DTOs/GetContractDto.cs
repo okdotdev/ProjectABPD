@@ -14,4 +14,5 @@ public class GetContractDto
     public string Version { get; set; }
     public int AdditionalSupportYears { get; set; }
     public bool IsSigned { get; set; }
+    public bool IsSubscription { get; set; }
 }

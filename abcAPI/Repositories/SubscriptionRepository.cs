@@ -1,6 +1,5 @@
 using abcAPI.Models;
 using abcAPI.Models.DTOs;
-using abcAPI.Models.TableModels;
 
 namespace abcAPI.Repositories;
 
