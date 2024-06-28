@@ -40,6 +40,20 @@ public class ContractRepository : IContractRepository
         await _context.SaveChangesAsync();
     }
 
+    public async Task<int> GetContractIdAsync(CreateContractDto createContractDto)
+    {
+        Contract? contract = await _context.Contracts.FirstOrDefaultAsync(c =>
+            c.SoftwareId == createContractDto.SoftwareId &&
+            c.ClientContracts.Any(cc => cc.ClientId == createContractDto.ClientId));
+
+        if (contract == null)
+        {
+            throw new NotFoundException("Contract not found");
+        }
+
+        return contract.Id;
+    }
+
     public async Task<List<GetContractDto>> GetContractsAsync()
     {
         DateTime currentDate = DateTime.Now;
@@ -131,15 +145,15 @@ public class ContractRepository : IContractRepository
         }
     }
 
-    public bool ClientHasContractForSoftwareAsync(int clientId, int softwareId)
+    public async Task<bool> ClientHasContractForSoftwareAsync(int clientId, int softwareId)
     {
-        return _context.Contracts.Any(c => c.ClientContracts.Any(cc => cc.ClientId == clientId) &&
-                                           c.SoftwareId == softwareId && c.IsSigned && c.EndDate >= DateTime.Now);
+        return await _context.Contracts.AnyAsync(c => c.ClientContracts.Any(cc => cc.ClientId == clientId) &&
+                                                      c.SoftwareId == softwareId && c.IsSigned && c.EndDate >= DateTime.Now);
     }
 
-    public bool ClientHasContractForAnySoftwareAsync(int clientId)
+    public async Task<bool> ClientHasContractForAnySoftwareAsync(int clientId)
     {
-        return _context.Contracts.Any(c => c.ClientContracts.Any(cc => cc.ClientId == clientId) && c.IsSigned &&
+        return await _context.Contracts.AnyAsync(c => c.ClientContracts.Any(cc => cc.ClientId == clientId) && c.IsSigned &&
                                            c.EndDate >= DateTime.Now);
     }
 

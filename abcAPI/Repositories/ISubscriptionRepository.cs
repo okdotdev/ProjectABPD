@@ -6,6 +6,5 @@ namespace abcAPI.Repositories;
 public interface ISubscriptionRepository
 {
     Task Subscribe(SubscribeDto subscribeDto);
-    Task Unsubscribe(SubscribeDto subscribeDto);
     Task<List<GetSubscriptionDto>> GetSubscriptionsList();
 }

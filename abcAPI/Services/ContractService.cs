@@ -40,7 +40,7 @@ public class ContractService : IContractService
             throw new ArgumentException("Additional support years must be between 1 and 3");
         }
 
-        bool contractExists =
+        bool contractExists = await
             _contractRepository.ClientHasContractForSoftwareAsync(createContractDto.ClientId,
                 createContractDto.SoftwareId);
 
@@ -66,7 +66,7 @@ public class ContractService : IContractService
             //ignore
         }
 
-        if (_contractRepository.ClientHasContractForAnySoftwareAsync(createContractDto.ClientId))
+        if ( await _contractRepository.ClientHasContractForAnySoftwareAsync(createContractDto.ClientId))
         {
             price *= 0.95m;
         }
@@ -98,6 +98,7 @@ public class ContractService : IContractService
             contract.IsPaid = true;
             contract.IsSigned = true;
         }
+
         await _contractRepository.UpdateContractAsync(contract);
 
         Payment payment = new Payment
@@ -129,5 +130,32 @@ public class ContractService : IContractService
     public async Task<Contract> GetContractByIdAsync(int contractId)
     {
         return await _contractRepository.GetContractByIdAsync(contractId);
+    }
+
+    public async Task CreatePaymentAsync(decimal price, int contractId)
+    {
+        Payment payment = new Payment
+        {
+            Amount = price,
+            ContractId = contractId,
+            Date = DateTime.Now
+        };
+
+        await _contractRepository.AddPaymentAsync(payment);
+    }
+
+    public async Task<int> GetContractIdAsync(CreateContractDto createContractDto)
+    {
+        return await _contractRepository.GetContractIdAsync(createContractDto);
+    }
+
+    public async Task<bool> ClientHasContractForSoftwareAsync(int clientId, int softwareId)
+    {
+        return await _contractRepository.ClientHasContractForSoftwareAsync(clientId, softwareId);
+    }
+
+    public async Task<bool> ClientHasContractForAnySoftwareAsync(int subscribeDtoClientId)
+    {
+        return await _contractRepository.ClientHasContractForAnySoftwareAsync(subscribeDtoClientId);
     }
 }

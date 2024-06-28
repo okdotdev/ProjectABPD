@@ -20,10 +20,7 @@ public class SubscriptionRepository : ISubscriptionRepository
         throw new NotImplementedException();
     }
 
-    public async Task Unsubscribe(SubscribeDto subscribeDto)
-    {
-        throw new NotImplementedException();
-    }
+
 
     public async Task<List<GetSubscriptionDto>> GetSubscriptionsList()
     {

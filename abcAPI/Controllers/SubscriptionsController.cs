@@ -42,13 +42,14 @@ public class SubscriptionsController : Controller
         }
     }
 
-    [HttpPost("unsubscribe")]
-    public async Task<IActionResult> Unsubscribe([FromForm] SubscribeDto subscribeDto)
+
+    [HttpGet("list")]
+    public async Task<IActionResult> GetSubscriptionsList()
     {
         try
         {
-            await _subscriptionService.UnsubscribeAsync(subscribeDto);
-            return RedirectToAction("Subscriptions");
+            List<GetSubscriptionDto> subscriptions = await _subscriptionService.GetSubscriptionsListAsync();
+            return Ok();
         }
         catch (NotFoundException ex)
         {
@@ -64,13 +65,13 @@ public class SubscriptionsController : Controller
         }
     }
 
-    [HttpGet("list")]
-    public async Task<IActionResult> GetSubscriptionsList()
+    [HttpPost("pay")]
+    public async Task<IActionResult> PayForSubscription([FromForm] PaymentDto payForSubscriptionDto)
     {
         try
         {
-            List<GetSubscriptionDto> subscriptions = await _subscriptionService.GetSubscriptionsListAsync();
-            return Ok();
+            await _subscriptionService.PayForSubscriptionAsync(payForSubscriptionDto);
+            return RedirectToAction("Subscriptions");
         }
         catch (NotFoundException ex)
         {
