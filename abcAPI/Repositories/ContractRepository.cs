@@ -2,6 +2,7 @@ using abcAPI.Exceptions;
 using abcAPI.Models;
 using abcAPI.Models.DTOs;
 using abcAPI.Models.TableModels;
+using iTextSharp.text;
 using Microsoft.EntityFrameworkCore;
 
 namespace abcAPI.Repositories;
@@ -57,7 +58,25 @@ public class ContractRepository : IContractRepository
     public Task<bool> ClientHasPaidForSubscriptionAsync(int contractId, bool isMonthly)
     {
         List<Payment> payments = _context.Payments.Where(p => p.ContractId == contractId).ToList();
-        return Task.FromResult(isMonthly ? payments.Any(p => p.Date >= DateTime.Now.AddMonths(-1)) : payments.Any(p => p.Date >= DateTime.Now.AddYears(-1)));
+        return Task.FromResult(isMonthly
+            ? payments.Any(p => p.Date >= DateTime.Now.AddMonths(-1))
+            : payments.Any(p => p.Date >= DateTime.Now.AddYears(-1)));
+    }
+
+    public async Task<List<PaymentDto>> GetPaymentsForContract(GetContractDto contractDto)
+    {
+        Contract? contract = await GetContractByIdAsync(contractDto.Id);
+
+        if (contract == null)
+            throw new NotFoundException("Contract not found");
+
+        List<Payment> payments = await _context.Payments.Where(p => p.ContractId == contract.Id).ToListAsync();
+        List<PaymentDto> paymentDtos = payments.Select(payment => new PaymentDto
+        {
+            Amount = payment.Amount,
+            ContractId = payment.ContractId
+        }).ToList();
+        return paymentDtos;
     }
 
     public async Task<List<GetContractDto>> GetContractsAsync()

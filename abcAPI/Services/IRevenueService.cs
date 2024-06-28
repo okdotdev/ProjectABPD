@@ -4,5 +4,6 @@ namespace abcAPI.Services;
 
 public interface IRevenueService
 {
-    Task<RevenueResponseDto> CalculateRevenueAsync(RevenueRequestDto requestDto);
+    Task<decimal> CalculateProjectedRevenueAsync(RevenueRequestDto requestDto);
+    Task<decimal> CalculateRealRevenueAsync(RevenueRequestDto requestDto);
 }

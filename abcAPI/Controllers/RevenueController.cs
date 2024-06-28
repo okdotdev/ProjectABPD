@@ -1,3 +1,4 @@
+using abcAPI.Exceptions;
 using abcAPI.Models.DTOs;
 using abcAPI.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -22,8 +23,16 @@ namespace abcAPI.Controllers
         {
             try
             {
-                RevenueResponseDto revenue = await _revenueService.CalculateRevenueAsync(requestDto);
-                return Ok(revenue.CurrentRevenue);
+                decimal revenue = await _revenueService.CalculateRealRevenueAsync(requestDto);
+                return RedirectToAction("RealRevenue", revenue);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
@@ -36,8 +45,16 @@ namespace abcAPI.Controllers
         {
             try
             {
-                RevenueResponseDto revenue = await _revenueService.CalculateRevenueAsync(requestDto);
-                return Ok(revenue.ProjectedRevenue);
+                decimal revenue = await _revenueService.CalculateProjectedRevenueAsync(requestDto);
+                return RedirectToAction("ProjectedRevenue",revenue);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {

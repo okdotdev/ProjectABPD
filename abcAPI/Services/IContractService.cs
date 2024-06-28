@@ -16,4 +16,5 @@ public interface IContractService
     Task<bool> ClientHasContractForSoftwareAsync(int clientId, int softwareId);
     Task<bool> ClientHasContractForAnySoftwareAsync(int subscribeDtoClientId);
     Task<bool> ClientHasPaidForSubscriptionAsync(int contractId, bool isMonthly);
+    Task<List<PaymentDto>> GetPaymentsForContract(GetContractDto contract);
 }

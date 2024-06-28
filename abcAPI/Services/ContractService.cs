@@ -166,4 +166,11 @@ public class ContractService : IContractService
     {
         return await _contractRepository.ClientHasPaidForSubscriptionAsync(contractId, isMonthly);
     }
+
+
+
+    public async Task<List<PaymentDto>> GetPaymentsForContract(GetContractDto contract)
+    {
+        return await _contractRepository.GetPaymentsForContract(contract);
+    }
 }
