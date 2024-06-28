@@ -43,11 +43,13 @@ namespace abcAPI.Controllers
             }
         }
 
+        [HttpGet("view/real")]
         public IActionResult RealRevenue()
         {
             return View("Real");
         }
 
+        [HttpGet("view/projected")]
         public IActionResult ProjectedRevenue()
         {
             return View("Projected");
