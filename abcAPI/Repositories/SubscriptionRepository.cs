@@ -15,11 +15,20 @@ public class SubscriptionRepository : ISubscriptionRepository
     }
 
 
-    public async Task Subscribe(SubscribeDto subscribeDto)
+    public async Task Subscribe(SubscribeDto subscribeDto, int contractId)
     {
-        throw new NotImplementedException();
-    }
+        Subscription subscription = new()
+        {
+            OfferName = subscribeDto.OfferName,
+            ContractId = contractId,
+            IsMonthly = subscribeDto.IsMonthly,
+            PriceOfRenewal = subscribeDto.RenewalPrice,
+            IsActive = true
+        };
 
+        await _context.Subscriptions.AddAsync(subscription);
+        await _context.SaveChangesAsync();
+    }
 
 
     public async Task<List<GetSubscriptionDto>> GetSubscriptionsList()

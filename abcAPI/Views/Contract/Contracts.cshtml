@@ -10,16 +10,13 @@
 <main class="container mt-4">
     <h1>Contracts Management</h1>
     <table class="table table-striped">
-        <form asp-controller="Raport" asp-action="GetContractsPdf" method="get">
-            <button type="submit" class="btn btn-outline-primary">Download PDF</button>
-        </form>
+
         <thead>
         <tr>
-            <th>Software Name</th>
             <th>Customer Id</th>
             <th>Software Id</th>
-            <th>StartDate</th>
-            <th>EndDate</th>
+            <th>Start Date</th>
+            <th>End Date</th>
             <th>Price</th>
             <th>Is Subscription</th>
             <th>Amount Payed</th>
@@ -31,41 +28,6 @@
         </tr>
         </thead>
         <tbody>
-        @foreach (GetContractDto contractDto in Model.Contracts)
-        {
-            <tr>
-                <td>@contractDto.SoftwareName</td>
-                <td>@contractDto.CustomerId</td>
-                <td>@contractDto.SoftwareId</td>
-                <td>@contractDto.StartDate</td>
-                <td>@contractDto.EndDate</td>
-                <td>@contractDto.Price PLN</td>
-                <td>@contractDto.IsSubscription</td>
-                <td>@contractDto.AmountPaid PLN</td>
-                <td>@contractDto.IsPaid</td>
-                <td>@contractDto.IsSigned</td>
-                <td>@contractDto.Version</td>
-                <td>@contractDto.AdditionalSupportYears</td>
-                <td>
-                    @if (!contractDto.IsPaid)
-                    {
-                        <a asp-controller="Contract" asp-action="Payment" asp-route-contractId="@contractDto.Id" class="btn btn-outline-primary">Pay</a>
-                    }
-                    @if (!contractDto.IsSigned)
-                    {
-                        <form asp-controller="Contract" asp-action="SignContract" method="post" class="d-inline">
-                            <input type="hidden" name="contractId" value="@contractDto.Id"/>
-                            <button type="submit" class="btn btn-outline-primary">Sign</button>
-                        </form>
-                    }
-                    <form asp-controller="Contract" asp-action="DeleteContract" method="post" class="d-inline">
-                        <input type="hidden" name="contractId" value="@contractDto.Id"/>
-                        <button type="submit" class="btn btn-outline-danger">Delete</button>
-                    </form>
-                </td>
-            </tr>
-        }
-
         <tr>
             <form asp-controller="Contract" asp-action="CreateContract" method="post">
                 <td>
@@ -106,6 +68,63 @@
                 </td>
             </form>
         </tr>
+        </tbody>
+
+
+        <form asp-controller="Raport" asp-action="GetContractsPdf" method="get">
+            <button type="submit" class="btn btn-outline-primary">Download PDF</button>
+        </form>
+        <thead>
+        <tr>
+            <th>Customer Id</th>
+            <th>Software Id</th>
+            <th>StartDate</th>
+            <th>EndDate</th>
+            <th>Price</th>
+            <th>Is Subscription</th>
+            <th>Amount Payed</th>
+            <th>IsPaid</th>
+            <th>IsSigned</th>
+            <th>Version</th>
+            <th>AdditionalSupportYears</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (GetContractDto contractDto in Model.Contracts)
+        {
+            <tr>
+                <td>@contractDto.CustomerId</td>
+                <td>@contractDto.SoftwareId</td>
+                <td>@contractDto.StartDate</td>
+                <td>@contractDto.EndDate</td>
+                <td>@contractDto.Price PLN</td>
+                <td>@contractDto.IsSubscription</td>
+                <td>@contractDto.AmountPaid PLN</td>
+                <td>@contractDto.IsPaid</td>
+                <td>@contractDto.IsSigned</td>
+                <td>@contractDto.Version</td>
+                <td>@contractDto.AdditionalSupportYears</td>
+                <td>
+                    @if (!contractDto.IsPaid)
+                    {
+                        <a asp-controller="Contract" asp-action="Payment" asp-route-contractId="@contractDto.Id" class="btn btn-outline-primary">Register Payment</a>
+                    }
+                    @if (!contractDto.IsSigned)
+                    {
+                        <form asp-controller="Contract" asp-action="SignContract" method="post" class="d-inline">
+                            <input type="hidden" name="contractId" value="@contractDto.Id"/>
+                            <button type="submit" class="btn btn-outline-primary">Sign</button>
+                        </form>
+                    }
+                    <form asp-controller="Contract" asp-action="DeleteContract" method="post" class="d-inline">
+                        <input type="hidden" name="contractId" value="@contractDto.Id"/>
+                        <button type="submit" class="btn btn-outline-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+
 
         </tbody>
     </table>

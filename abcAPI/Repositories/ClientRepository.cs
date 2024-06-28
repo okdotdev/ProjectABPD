@@ -136,6 +136,8 @@ namespace abcAPI.Repositories
 
         public async Task<Client> GetClientByIdAsync(int clientId)
         {
+
+
             Client? client = await _context.Clients.FindAsync(clientId);
 
             if (client == null)

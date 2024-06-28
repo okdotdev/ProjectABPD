@@ -26,7 +26,7 @@ public class ContractController : Controller
     {
         try
         {
-            await _contractService.CreateContractAsync(createContractDto);
+            await _contractService.CreateContractAsync(createContractDto, false);
             return RedirectToAction("Contracts");
         }
         catch (NotFoundException ex)
@@ -128,6 +128,7 @@ public class ContractController : Controller
             return BadRequest(ex.Message);
         }
     }
+
     [HttpGet("view")]
     public async Task<IActionResult> Contracts()
     {

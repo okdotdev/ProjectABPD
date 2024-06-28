@@ -20,24 +20,27 @@ public class ContractService : IContractService
         _clientService = clientService;
     }
 
-    public async Task CreateContractAsync(CreateContractDto createContractDto)
+    public async Task CreateContractAsync(CreateContractDto createContractDto, bool fromSubscription)
     {
         await _clientService.GetClientAsync(createContractDto.ClientId);
 
-        if (createContractDto.StartDate >= createContractDto.EndDate)
+        if (!fromSubscription)
         {
-            throw new ArgumentException("Start date must be before end date");
-        }
+            if (createContractDto.StartDate >= createContractDto.EndDate)
+            {
+                throw new ArgumentException("Start date must be before end date");
+            }
 
-        if ((createContractDto.EndDate - createContractDto.StartDate).TotalDays < 3 ||
-            (createContractDto.EndDate - createContractDto.StartDate).TotalDays > 30)
-        {
-            throw new ArgumentException("Contract must last between 3 and 30 days");
-        }
+            if ((createContractDto.EndDate - createContractDto.StartDate).TotalDays < 3 ||
+                (createContractDto.EndDate - createContractDto.StartDate).TotalDays > 30)
+            {
+                throw new ArgumentException("Contract must last between 3 and 30 days");
+            }
 
-        if (createContractDto.AdditionalSupportYears < 1 || createContractDto.AdditionalSupportYears > 3)
-        {
-            throw new ArgumentException("Additional support years must be between 1 and 3");
+            if (createContractDto.AdditionalSupportYears < 1 || createContractDto.AdditionalSupportYears > 3)
+            {
+                throw new ArgumentException("Additional support years must be between 1 and 3");
+            }
         }
 
         bool contractExists = await
@@ -66,7 +69,7 @@ public class ContractService : IContractService
             //ignore
         }
 
-        if ( await _contractRepository.ClientHasContractForAnySoftwareAsync(createContractDto.ClientId))
+        if (await _contractRepository.ClientHasContractForAnySoftwareAsync(createContractDto.ClientId))
         {
             price *= 0.95m;
         }

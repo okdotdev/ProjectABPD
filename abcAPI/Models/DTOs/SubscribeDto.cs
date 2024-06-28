@@ -2,6 +2,7 @@ namespace abcAPI.Models.DTOs;
 
 public class SubscribeDto
 {
+    public string OfferName { get; set; }
     public int SoftwareId { get; set; }
     public int ClientId { get; set; }
     public DateTime StartDate { get; set; }

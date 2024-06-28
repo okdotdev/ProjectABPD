@@ -1,3 +1,4 @@
+using abcAPI.Exceptions;
 using abcAPI.Models.DTOs;
 using abcAPI.Models.TableModels;
 using abcAPI.Repositories;
@@ -9,13 +10,15 @@ public class SubscriptionService : ISubscriptionService
     private readonly ISubscriptionRepository _subscriptionRepository;
     private readonly IContractService _contractService;
     private readonly IDiscountService _discountService;
+    private readonly ISoftwareService _softwareService;
 
     public SubscriptionService(ISubscriptionRepository subscriptionRepository, IContractService contractService,
-        IDiscountService discountService)
+        IDiscountService discountService, ISoftwareService softwareService)
     {
         _subscriptionRepository = subscriptionRepository;
         _contractService = contractService;
         _discountService = discountService;
+        _softwareService = softwareService;
     }
 
 
@@ -32,14 +35,16 @@ public class SubscriptionService : ISubscriptionService
                 throw new ArgumentException("Subscription time should be at least 1 month");
             case > 730:
                 throw new ArgumentException("Subscription time should be at most 2 years");
-            default:
-                await _subscriptionRepository.Subscribe(subscribeDto);
-                break;
         }
 
         //tworzymy kontrakt
 
         int additionalSupportYears = subscribeDto.EndDate.Year - subscribeDto.StartDate.Year;
+
+        //get software version
+
+        GetSoftwareDto software = await _softwareService.GetSoftwareAsync(subscribeDto.SoftwareId);
+
 
         CreateContractDto createContractDto = new()
         {
@@ -48,21 +53,31 @@ public class SubscriptionService : ISubscriptionService
             EndDate = subscribeDto.EndDate,
             SoftwareId = subscribeDto.SoftwareId,
             AdditionalSupportYears = additionalSupportYears,
+            Version = software.CurrentVersion,
             Price = subscribeDto.RenewalPrice
         };
 
-        await _contractService.CreateContractAsync(createContractDto);
+        await _contractService.CreateContractAsync(createContractDto, true);
 
         int contractId = await _contractService.GetContractIdAsync(createContractDto);
 
 
         //tworzymy pierwszą płatność za subscrybcje (oraz nakładamy aktywne zniżki)
+        Discount discount;
+        try
+        {
+            discount = await _discountService.GetBiggestDiscountAsync();
+        }
+        catch (NotFoundException)
+        {
+            discount = new Discount { Value = 0 };
+        }
 
-        Discount discount = await _discountService.GetBiggestDiscountAsync();
 
         decimal firstPaymentValue = subscribeDto.RenewalPrice -= discount.Value;
 
         //sprawdzamy, czy klient ma już umowę na to oprogramowanie
+
 
         if (await _contractService.ClientHasContractForSoftwareAsync(subscribeDto.ClientId, subscribeDto.SoftwareId))
         {
@@ -77,6 +92,10 @@ public class SubscriptionService : ISubscriptionService
         }
 
         await _contractService.CreatePaymentAsync(firstPaymentValue, contractId);
+
+        //tworzymy subskrypcję
+
+        await _subscriptionRepository.Subscribe(subscribeDto, contractId);
     }
 
 
