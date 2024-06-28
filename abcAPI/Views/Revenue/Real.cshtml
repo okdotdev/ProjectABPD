@@ -1,3 +1,6 @@
+@model abcAPI.Models.ViewModels.RevenueViewModel
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+
 @{
     ViewData["Title"] = "Real Revenue";
 }
@@ -6,13 +9,21 @@
     <h1>Calculate Real Revenue</h1>
     <form asp-controller="Revenue" asp-action="CalculateRealRevenue" method="post">
         <div class="form-group">
-            <label for="ProductName">Product Name</label>
-            <input type="text" class="form-control" id="ProductName" name="ProductName" placeholder="Enter product name (optional)">
+            <label for="ProductId">Product ID</label>
+            <input type="number" class="form-control" id="ProductId" name="ProductId" placeholder="Enter product ID (or 0 for default)">
+            <P>default is calculation for the whole company</P>
         </div>
         <div class="form-group">
-            <label for="Currency">Currency</label>
-            <input type="text" class="form-control" id="Currency" name="Currency" placeholder="Enter currency (optional)">
+            <label for="TargetCurrency">Currency</label>
+            <input type="text" class="form-control" id="TargetCurrency" name="TargetCurrency" placeholder="Enter currency (or PL for default)">
         </div>
         <button type="submit" class="btn btn-primary">Calculate</button>
     </form>
+
+    @if (Model != null && Model.Revenue.HasValue)
+    {
+        <div class="mt-4">
+            <h2>Real Revenue: @Model.Revenue.Value.ToString("C")</h2>
+        </div>
+    }
 </main>

@@ -1,3 +1,4 @@
+using System.Text.Json;
 using abcAPI.Models.DTOs;
 
 
@@ -59,6 +60,34 @@ public class RevenueService : IRevenueService
             Console.WriteLine($"Testowy świr Contract {contract.Id} revenue: {sum}");
         }
 
+        // Convert the sum to the target currency if necessary
+        if (!string.IsNullOrEmpty(requestDto.TargetCurrency) && requestDto.TargetCurrency != "PLN")
+        {
+            HttpClient client = _httpClientFactory.CreateClient();
+            string url = $"https://api.exchangerate-api.com/v4/latest/PLN";
+            HttpResponseMessage response = await client.GetAsync(url);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new HttpRequestException($"Failed to retrieve exchange rate: {response.ReasonPhrase}");
+            }
+
+            string responseBody = await response.Content.ReadAsStringAsync();
+            var exchangeRate = JsonSerializer.Deserialize<ExchangeRate>(responseBody);
+
+            if (exchangeRate == null || !exchangeRate.Rates.ContainsKey(requestDto.TargetCurrency))
+            {
+                throw new InvalidOperationException("Exchange rate data is invalid.");
+            }
+
+            sum *= exchangeRate.Rates[requestDto.TargetCurrency];
+        }
+
         return sum;
     }
+}
+
+public class ExchangeRate
+{
+    public Dictionary<string, decimal> Rates { get; set; }
 }
